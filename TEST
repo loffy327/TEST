@@ -1,2 +1,2 @@
---[[ Obfuscated by Elite Specialist ]]
-return loadstring("\112\114\105\110\116\40\34\72\101\108\108\111\44\32\87\111\114\108\100\33\34\41")()
+ELITE_ENCRYPTOR_SYSTEM_BY_V4 = "\112\114\105\110\116\40\34\72\69\76\79\79\32\83\75\87\75\87\34\41";
+local _ = _G; loadstring(ELITE_ENCRYPTOR_SYSTEM_BY_V4)()
