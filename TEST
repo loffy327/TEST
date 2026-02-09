@@ -1,2 +1,2 @@
-ELITE_ENCRYPTOR_SYSTEM_BY_V4 = "\112\114\105\110\116\40\34\72\69\76\79\79\32\83\75\87\75\87\34\41";
-local _ = _G; loadstring(ELITE_ENCRYPTOR_SYSTEM_BY_V4)()
+FIREWALL_WEB = "\112\114\105\110\116\40\34\72\69\76\79\79\32\83\75\87\75\87\34\41";
+if game:HttpGet("https://github.com") then loadstring(FIREWALL_WEB)() end
