@@ -1,0 +1,63 @@
+return function()
+    local result = {
+        Name = "Unknown",
+        Platform = "Unknown",
+        IsMobile = false,
+        IsPC = false
+    }
+
+    -- 1. Kiểm tra bằng hàm chuẩnidentifyexecutor
+    if identifyexecutor then
+        local name, version = identifyexecutor()
+        result.Name = name
+        
+        -- Phân loại nhanh dựa trên tên phổ biến
+        local lowerName = string.lower(name)
+        if string.find(lowerName, "delta") then
+            result.Platform = "Mobile"
+            result.IsMobile = true
+            return result
+        elseif string.find(lowerName, "potassium") or string.find(lowerName, "volt") then
+            result.Platform = "PC"
+            result.IsPC = true
+            return result
+        end
+    end
+
+    -- 2. Kiểm tra thủ công bằng Environment (Nếu identifyexecutor bị giả mạo hoặc không có)
+    if getgenv then
+        local env = getgenv()
+        
+        -- Kiểm tra Potassium (PC)
+        if env.potassium or env._POTASSIUM or _G.Potassium then
+            result.Name = "Potassium"
+            result.Platform = "PC"
+            result.IsPC = true
+            return result
+        end
+
+        -- Kiểm tra Volt (PC)
+        if env.volt or _G.Volt then
+            result.Name = "Volt"
+            result.Platform = "PC"
+            result.IsPC = true
+            return result
+        end
+
+        -- Kiểm tra Delta (Mobile)
+        if env.Delta or _G.Delta or Delta then
+            result.Name = "Delta"
+            result.Platform = "Mobile"
+            result.IsMobile = true
+            return result
+        end
+    end
+
+    -- Dự phòng cho các dòng máy khác nếu cần
+    if KRNL_LOADED then result.Name = "Krnl" result.Platform = "PC" result.IsPC = true
+    elseif Fluxus then result.Name = "Fluxus"
+    elseif syn then result.Name = "Synapse" result.Platform = "PC" result.IsPC = true
+    end
+
+    return result
+end
