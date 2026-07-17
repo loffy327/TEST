@@ -1,29 +1,25 @@
 --[[
-    ================================================================
-    
-                        PremiumMenu v3
-                  Roblox Luau UI Library Framework
-                  
-        Full Source License  :  4,000,000 VND
-        Developer            :  loffy327
-        Version              :  3.0.0
-        Build                :  2026.06.21
-        
-        FEATURES:
-            Window system with minimize / maximize / close
-            Sidebar tab navigation with active indicators
-            Section dividers for organized layouts
-            Toggle  |  Slider  |  Button  |  Dropdown
-            Input   |  Keybind |  ColorPicker  |  Label
-            Notification toast system (4 types)
-            Config save / load system
-            Tutorial overlay with Copy + Back + X Close
-            Remote execution guide page
-            Full theme / accent customization
-            Drag to move  |  Keybind toggle visibility
-            
-    ================================================================
---]]
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║                   PremiumMenu v3                             ║
+║           Roblox Luau UI Library  |  Full Source             ║
+║                                                              ║
+║   Developer  :  loffy327                                     ║
+║   Version    :  3.0.0                                        ║
+║   License    :  Full Source  -  4,000,000 VND                ║
+║                                                              ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║   NEW IN V3:                                                 ║
+║   - Smooth scrolling Dropdowns (unlimited items)             ║
+║   - Multi-Select Dropdowns                                   ║
+║   - Paragraph Elements for large text blocks                 ║
+║   - Sliders with Text Input (Manual typing support)          ║
+║   - Upgraded micro-animations and aesthetic shadows          ║
+║   - Seamless backwards compatibility                         ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+]]
 
 local PremiumMenu = {}
 PremiumMenu.__index = PremiumMenu
@@ -46,11 +42,11 @@ local LocalPlayer = Players.LocalPlayer
 
 local DefaultTheme = {
     -- Backgrounds
-    BG          = Color3.fromRGB(13, 13, 20),
-    BGAlt       = Color3.fromRGB(18, 18, 28),
-    Surface     = Color3.fromRGB(22, 22, 35),
-    SurfaceHov  = Color3.fromRGB(28, 28, 44),
-    SurfaceAct  = Color3.fromRGB(34, 34, 52),
+    BG          = Color3.fromRGB(15, 15, 20),
+    BGAlt       = Color3.fromRGB(20, 20, 28),
+    Surface     = Color3.fromRGB(25, 25, 35),
+    SurfaceHov  = Color3.fromRGB(32, 32, 45),
+    SurfaceAct  = Color3.fromRGB(40, 40, 55),
 
     -- Accent (overridable)
     Accent      = Color3.fromRGB(99, 102, 241),
@@ -59,12 +55,12 @@ local DefaultTheme = {
 
     -- Text
     TxtHigh     = Color3.fromRGB(240, 240, 250),
-    TxtMid      = Color3.fromRGB(150, 150, 170),
-    TxtLow      = Color3.fromRGB(80, 80, 105),
+    TxtMid      = Color3.fromRGB(160, 160, 180),
+    TxtLow      = Color3.fromRGB(90, 90, 110),
 
     -- Borders
-    Border      = Color3.fromRGB(38, 38, 58),
-    BorderHov   = Color3.fromRGB(58, 58, 85),
+    Border      = Color3.fromRGB(45, 45, 60),
+    BorderHov   = Color3.fromRGB(65, 65, 85),
 
     -- Status
     Green       = Color3.fromRGB(34, 197, 94),
@@ -73,8 +69,8 @@ local DefaultTheme = {
     Blue        = Color3.fromRGB(56, 189, 248),
 
     -- Misc
-    Divider     = Color3.fromRGB(32, 32, 50),
-    Scrollbar   = Color3.fromRGB(50, 50, 75),
+    Divider     = Color3.fromRGB(35, 35, 50),
+    Scrollbar   = Color3.fromRGB(60, 60, 80),
 
     -- Font
     FontBold    = Enum.Font.GothamBold,
@@ -82,13 +78,13 @@ local DefaultTheme = {
     FontMono    = Enum.Font.Code,
 
     -- Radius
-    RadiusLg    = UDim.new(0, 12),
+    RadiusLg    = UDim.new(0, 10),
     RadiusMd    = UDim.new(0, 8),
     RadiusSm    = UDim.new(0, 6),
     RadiusXs    = UDim.new(0, 4),
 
     -- Timing
-    TweenTime   = 0.22,
+    TweenTime   = 0.2,
     TweenStyle  = Enum.EasingStyle.Quint,
 }
 
@@ -162,9 +158,9 @@ function Util.Shadow(parent)
         BackgroundTransparency = 1,
         Image              = "rbxassetid://6014261993",
         ImageColor3        = Color3.new(0, 0, 0),
-        ImageTransparency  = 0.55,
-        Size               = UDim2.new(1, 35, 1, 35),
-        Position           = UDim2.new(0, -17, 0, -17),
+        ImageTransparency  = 0.6,
+        Size               = UDim2.new(1, 40, 1, 40),
+        Position           = UDim2.new(0, -20, 0, -20),
         ZIndex             = parent.ZIndex - 1,
         ScaleType          = Enum.ScaleType.Slice,
         SliceCenter        = Rect.new(49, 49, 450, 450),
@@ -177,7 +173,7 @@ function Util.Ripple(btn, color)
     local rip = Util.New("Frame", {
         Name                = "_Ripple",
         BackgroundColor3    = color or Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.75,
+        BackgroundTransparency = 0.8,
         Size                = UDim2.new(0, 0, 0, 0),
         Position            = UDim2.new(0.5, 0, 0.5, 0),
         AnchorPoint         = Vector2.new(0.5, 0.5),
@@ -188,7 +184,7 @@ function Util.Ripple(btn, color)
     Util.Tween(rip, {
         Size = UDim2.new(2.5, 0, 2.5, 0),
         BackgroundTransparency = 1
-    }, 0.55, Enum.EasingStyle.Quad)
+    }, 0.5, Enum.EasingStyle.Quad)
     task.delay(0.6, function()
         if rip and rip.Parent then rip:Destroy() end
     end)
@@ -198,15 +194,29 @@ function Util.HoverBind(frame, normal, hover, prop)
     prop = prop or "BackgroundColor3"
     frame.InputBegan:Connect(function(inp)
         if inp.UserInputType == Enum.UserInputType.MouseMovement then
-            Util.Tween(frame, {[prop] = hover}, 0.14)
+            Util.Tween(frame, {[prop] = hover}, 0.15)
         end
     end)
     frame.InputEnded:Connect(function(inp)
         if inp.UserInputType == Enum.UserInputType.MouseMovement then
-            Util.Tween(frame, {[prop] = normal}, 0.14)
+            Util.Tween(frame, {[prop] = normal}, 0.15)
         end
     end)
 end
+
+function Util.GetTextBounds(text, font, size, bounds)
+    local textLabel = Util.New("TextLabel", {
+        Text = text,
+        Font = font,
+        TextSize = size,
+        Size = UDim2.new(0, bounds.X, 0, bounds.Y),
+        TextWrapped = true,
+    })
+    local result = textLabel.TextBounds
+    textLabel:Destroy()
+    return result
+end
+
 
 -- ================================================================
 --  CREATE WINDOW
@@ -230,8 +240,8 @@ function PremiumMenu:CreateWindow(cfg)
         Subtitle     = cfg.Subtitle     or "v3.0",
         LogoText     = cfg.LogoText     or "P",
         LogoImage    = cfg.LogoImage    or nil,
-        Size         = cfg.Size         or UDim2.new(0, 600, 0, 430),
-        MinSize      = cfg.MinSize      or UDim2.new(0, 600, 0, 52),
+        Size         = cfg.Size         or UDim2.new(0, 620, 0, 450),
+        MinSize      = cfg.MinSize      or UDim2.new(0, 620, 0, 52),
         ConfigKey    = cfg.ConfigKey    or "PMv3Config",
         ToggleKey    = cfg.ToggleKey    or Enum.KeyCode.RightShift,
         TutorialMode = (cfg.TutorialMode == nil) and true or cfg.TutorialMode,
@@ -286,10 +296,10 @@ function PremiumMenu:CreateWindow(cfg)
     Util.Tween(Win, {
         Size = WCfg.Size,
         BackgroundTransparency = 0,
-    }, 0.55, Enum.EasingStyle.Back)
+    }, 0.5, Enum.EasingStyle.Back)
 
     -- ============================================================
-    --  TOP ACCENT LINE
+    --  TOP ACCENT LINE (Glow)
     -- ============================================================
 
     local AccentLine = Util.New("Frame", {
@@ -316,8 +326,8 @@ function PremiumMenu:CreateWindow(cfg)
         })
         task.spawn(function()
             while AccentLine and AccentLine.Parent do
-                Util.Tween(g, {Offset = Vector2.new(1, 0)}, 2.2, Enum.EasingStyle.Linear)
-                task.wait(2.2)
+                Util.Tween(g, {Offset = Vector2.new(1, 0)}, 2, Enum.EasingStyle.Linear)
+                task.wait(2)
                 g.Offset = Vector2.new(-1, 0)
             end
         end)
@@ -330,8 +340,8 @@ function PremiumMenu:CreateWindow(cfg)
     local TitleBar = Util.New("Frame", {
         Name             = "TitleBar",
         BackgroundColor3 = T.BGAlt,
-        BackgroundTransparency = 0.25,
-        Size             = UDim2.new(1, 0, 0, 50),
+        BackgroundTransparency = 0.2,
+        Size             = UDim2.new(1, 0, 0, 52),
         Position         = UDim2.new(0, 0, 0, 2),
         BorderSizePixel  = 0,
         ZIndex           = 3,
@@ -350,18 +360,18 @@ function PremiumMenu:CreateWindow(cfg)
     -- Logo badge
     local LogoBadge = Util.New("Frame", {
         BackgroundColor3 = T.Accent,
-        Size             = UDim2.new(0, 30, 0, 30),
-        Position         = UDim2.new(0, 14, 0.5, 0),
+        Size             = UDim2.new(0, 32, 0, 32),
+        Position         = UDim2.new(0, 16, 0.5, 0),
         AnchorPoint      = Vector2.new(0, 0.5),
         ZIndex           = 4,
         Parent           = TitleBar,
     })
-    Util.Corner(LogoBadge, UDim.new(0, 7))
+    Util.Corner(LogoBadge, UDim.new(0, 8))
 
     if WCfg.LogoImage then
         Util.New("ImageLabel", {
             BackgroundTransparency = 1,
-            Size        = UDim2.new(0.75, 0, 0.75, 0),
+            Size        = UDim2.new(0.7, 0, 0.7, 0),
             Position    = UDim2.new(0.5, 0, 0.5, 0),
             AnchorPoint = Vector2.new(0.5, 0.5),
             Image       = WCfg.LogoImage,
@@ -375,7 +385,7 @@ function PremiumMenu:CreateWindow(cfg)
             Font        = T.FontBold,
             Text        = WCfg.LogoText,
             TextColor3  = Color3.new(1, 1, 1),
-            TextSize    = 16,
+            TextSize    = 18,
             ZIndex      = 5,
             Parent      = LogoBadge,
         })
@@ -384,12 +394,12 @@ function PremiumMenu:CreateWindow(cfg)
     -- Title text
     Util.New("TextLabel", {
         BackgroundTransparency = 1,
-        Size        = UDim2.new(0.45, -55, 0, 20),
-        Position    = UDim2.new(0, 54, 0, 8),
+        Size        = UDim2.new(0.45, -55, 0, 22),
+        Position    = UDim2.new(0, 60, 0, 8),
         Font        = T.FontBold,
         Text        = WCfg.Title,
         TextColor3  = T.TxtHigh,
-        TextSize    = 15,
+        TextSize    = 16,
         TextXAlignment = Enum.TextXAlignment.Left,
         ZIndex      = 4,
         Parent      = TitleBar,
@@ -398,11 +408,11 @@ function PremiumMenu:CreateWindow(cfg)
     Util.New("TextLabel", {
         BackgroundTransparency = 1,
         Size        = UDim2.new(0.45, -55, 0, 14),
-        Position    = UDim2.new(0, 54, 0, 30),
+        Position    = UDim2.new(0, 60, 0, 30),
         Font        = T.FontMed,
         Text        = WCfg.Subtitle,
         TextColor3  = T.TxtLow,
-        TextSize    = 11,
+        TextSize    = 12,
         TextXAlignment = Enum.TextXAlignment.Left,
         ZIndex      = 4,
         Parent      = TitleBar,
@@ -414,7 +424,7 @@ function PremiumMenu:CreateWindow(cfg)
 
     local CtrlFrame = Util.New("Frame", {
         BackgroundTransparency = 1,
-        Size        = UDim2.new(0, 114, 0, 32),
+        Size        = UDim2.new(0, 114, 0, 34),
         Position    = UDim2.new(1, -122, 0.5, 0),
         AnchorPoint = Vector2.new(0, 0.5),
         ZIndex      = 5,
@@ -425,7 +435,7 @@ function PremiumMenu:CreateWindow(cfg)
         FillDirection       = Enum.FillDirection.Horizontal,
         HorizontalAlignment = Enum.HorizontalAlignment.Left,
         VerticalAlignment   = Enum.VerticalAlignment.Center,
-        Padding             = UDim.new(0, 6),
+        Padding             = UDim.new(0, 8),
         SortOrder           = Enum.SortOrder.LayoutOrder,
         Parent              = CtrlFrame,
     })
@@ -438,7 +448,7 @@ function PremiumMenu:CreateWindow(cfg)
             Font             = T.FontBold,
             Text             = label,
             TextColor3       = T.TxtMid,
-            TextSize         = 15,
+            TextSize         = 16,
             AutoButtonColor  = false,
             LayoutOrder      = layoutOrder,
             ZIndex           = 6,
@@ -447,10 +457,10 @@ function PremiumMenu:CreateWindow(cfg)
         Util.Corner(btn, T.RadiusSm)
 
         btn.MouseEnter:Connect(function()
-            Util.Tween(btn, {BackgroundColor3 = hoverCol, TextColor3 = Color3.new(1,1,1)}, 0.14)
+            Util.Tween(btn, {BackgroundColor3 = hoverCol, TextColor3 = Color3.new(1,1,1)}, 0.15)
         end)
         btn.MouseLeave:Connect(function()
-            Util.Tween(btn, {BackgroundColor3 = T.SurfaceAct, TextColor3 = T.TxtMid}, 0.14)
+            Util.Tween(btn, {BackgroundColor3 = T.SurfaceAct, TextColor3 = T.TxtMid}, 0.15)
         end)
         btn.MouseButton1Click:Connect(function()
             Util.Ripple(btn)
@@ -464,10 +474,10 @@ function PremiumMenu:CreateWindow(cfg)
     MakeCtrlBtn("Minimize", "-", T.Yellow, 1, function()
         State.Minimized = not State.Minimized
         if State.Minimized then
-            Util.Tween(Win, {Size = WCfg.MinSize}, 0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In)
+            Util.Tween(Win, {Size = WCfg.MinSize}, 0.35, Enum.EasingStyle.Back, Enum.EasingDirection.In)
         else
             local target = State.Maximized and UDim2.new(1,-40,1,-40) or WCfg.Size
-            Util.Tween(Win, {Size = target}, 0.3, Enum.EasingStyle.Back)
+            Util.Tween(Win, {Size = target}, 0.35, Enum.EasingStyle.Back)
         end
     end)
 
@@ -476,16 +486,16 @@ function PremiumMenu:CreateWindow(cfg)
         if State.Minimized then State.Minimized = false end
         State.Maximized = not State.Maximized
         if State.Maximized then
-            Util.Tween(Win, {Size = UDim2.new(1,-40,1,-40), Position = UDim2.new(0.5,0,0.5,0)}, 0.3, Enum.EasingStyle.Back)
+            Util.Tween(Win, {Size = UDim2.new(1,-40,1,-40), Position = UDim2.new(0.5,0,0.5,0)}, 0.35, Enum.EasingStyle.Back)
         else
-            Util.Tween(Win, {Size = WCfg.Size, Position = UDim2.new(0.5,0,0.5,0)}, 0.3, Enum.EasingStyle.Back)
+            Util.Tween(Win, {Size = WCfg.Size, Position = UDim2.new(0.5,0,0.5,0)}, 0.35, Enum.EasingStyle.Back)
         end
     end)
 
     -- [3] Close
     MakeCtrlBtn("Close", "X", T.Red, 3, function()
-        Util.Tween(Win, {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}, 0.35, Enum.EasingStyle.Back, Enum.EasingDirection.In)
-        task.delay(0.4, function() Gui:Destroy() end)
+        Util.Tween(Win, {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}, 0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In)
+        task.delay(0.45, function() Gui:Destroy() end)
     end)
 
     -- ============================================================
@@ -527,8 +537,8 @@ function PremiumMenu:CreateWindow(cfg)
 
     local Body = Util.New("Frame", {
         BackgroundTransparency = 1,
-        Size     = UDim2.new(1, 0, 1, -52),
-        Position = UDim2.new(0, 0, 0, 52),
+        Size     = UDim2.new(1, 0, 1, -54),
+        Position = UDim2.new(0, 0, 0, 54),
         ZIndex   = 2,
         Parent   = Win,
     })
@@ -537,8 +547,8 @@ function PremiumMenu:CreateWindow(cfg)
 
     local Sidebar = Util.New("Frame", {
         BackgroundColor3       = T.BGAlt,
-        BackgroundTransparency = 0.15,
-        Size        = UDim2.new(0, 158, 1, 0),
+        BackgroundTransparency = 0.1,
+        Size        = UDim2.new(0, 170, 1, 0),
         BorderSizePixel = 0,
         ZIndex      = 2,
         Parent      = Body,
@@ -555,8 +565,8 @@ function PremiumMenu:CreateWindow(cfg)
 
     local SideScroll = Util.New("ScrollingFrame", {
         BackgroundTransparency  = 1,
-        Size        = UDim2.new(1, -10, 1, -14),
-        Position    = UDim2.new(0, 5, 0, 7),
+        Size        = UDim2.new(1, -12, 1, -16),
+        Position    = UDim2.new(0, 6, 0, 8),
         CanvasSize  = UDim2.new(0, 0, 0, 0),
         AutomaticCanvasSize    = Enum.AutomaticSize.Y,
         ScrollBarThickness     = 2,
@@ -571,8 +581,8 @@ function PremiumMenu:CreateWindow(cfg)
 
     local Content = Util.New("Frame", {
         BackgroundTransparency = 1,
-        Size     = UDim2.new(1, -160, 1, 0),
-        Position = UDim2.new(0, 160, 0, 0),
+        Size     = UDim2.new(1, -172, 1, 0),
+        Position = UDim2.new(0, 172, 0, 0),
         ClipsDescendants = true,
         ZIndex   = 2,
         Parent   = Body,
@@ -584,8 +594,8 @@ function PremiumMenu:CreateWindow(cfg)
 
     local NotifContainer = Util.New("Frame", {
         BackgroundTransparency = 1,
-        Size     = UDim2.new(0, 310, 1, -20),
-        Position = UDim2.new(1, -320, 0, 10),
+        Size     = UDim2.new(0, 320, 1, -20),
+        Position = UDim2.new(1, -330, 0, 10),
         ZIndex   = 100,
         Parent   = Gui,
     })
@@ -593,7 +603,7 @@ function PremiumMenu:CreateWindow(cfg)
         local nl = Instance.new("UIListLayout")
         nl.SortOrder           = Enum.SortOrder.LayoutOrder
         nl.VerticalAlignment   = Enum.VerticalAlignment.Bottom
-        nl.Padding             = UDim.new(0, 8)
+        nl.Padding             = UDim.new(0, 10)
         nl.Parent              = NotifContainer
     end
 
@@ -613,17 +623,17 @@ function PremiumMenu:CreateWindow(cfg)
 
         local nf = Util.New("Frame", {
             BackgroundColor3 = T.Surface,
-            Size    = UDim2.new(1, 0, 0, 68),
+            Size    = UDim2.new(1, 0, 0, 75),
             ZIndex  = 101,
             LayoutOrder = NotifCount,
             Parent  = NotifContainer,
         })
         Util.Corner(nf, T.RadiusMd)
-        Util.Stroke(nf, barColor, 1, 0.55)
+        Util.Stroke(nf, barColor, 1, 0.6)
 
         local bar = Util.New("Frame", {
             BackgroundColor3 = barColor,
-            Size     = UDim2.new(0, 3, 0.65, 0),
+            Size     = UDim2.new(0, 4, 0.65, 0),
             Position = UDim2.new(0, 8, 0.175, 0),
             BorderSizePixel = 0,
             ZIndex   = 102,
@@ -633,37 +643,37 @@ function PremiumMenu:CreateWindow(cfg)
 
         Util.New("TextLabel", {
             BackgroundTransparency = 1,
-            Size     = UDim2.new(1, -28, 0, 20),
-            Position = UDim2.new(0, 20, 0, 10),
+            Size     = UDim2.new(1, -30, 0, 20),
+            Position = UDim2.new(0, 22, 0, 10),
             Font     = T.FontBold,
-            Text     = opts.Title   or "Notice",
+            Text     = opts.Title   or "Notification",
             TextColor3 = T.TxtHigh,
-            TextSize = 13,
+            TextSize = 14,
             TextXAlignment = Enum.TextXAlignment.Left,
             ZIndex   = 102,
             Parent   = nf,
         })
         Util.New("TextLabel", {
             BackgroundTransparency = 1,
-            Size     = UDim2.new(1, -28, 0, 28),
-            Position = UDim2.new(0, 20, 0, 30),
+            Size     = UDim2.new(1, -30, 0, 34),
+            Position = UDim2.new(0, 22, 0, 32),
             Font     = T.FontMed,
             Text     = opts.Content or "",
             TextColor3 = T.TxtMid,
-            TextSize = 11,
+            TextSize = 12,
             TextXAlignment = Enum.TextXAlignment.Left,
             TextWrapped = true,
             ZIndex   = 102,
             Parent   = nf,
         })
 
-        nf.Position = UDim2.new(1, 40, 0, 0)
-        nf.BackgroundTransparency = 0.4
-        Util.Tween(nf, {Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 0}, 0.32)
+        nf.Position = UDim2.new(1, 50, 0, 0)
+        nf.BackgroundTransparency = 0.5
+        Util.Tween(nf, {Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 0}, 0.35)
 
         task.delay(opts.Duration or 4, function()
-            Util.Tween(nf, {Position = UDim2.new(1, 40, 0, 0), BackgroundTransparency = 1}, 0.32)
-            task.delay(0.35, function()
+            Util.Tween(nf, {Position = UDim2.new(1, 50, 0, 0), BackgroundTransparency = 1}, 0.35)
+            task.delay(0.4, function()
                 if nf and nf.Parent then nf:Destroy() end
             end)
         end)
@@ -690,7 +700,7 @@ function PremiumMenu:CreateWindow(cfg)
         local TabBtn = Util.New("TextButton", {
             BackgroundColor3       = T.Surface,
             BackgroundTransparency = 1,
-            Size        = UDim2.new(1, -6, 0, 40),
+            Size        = UDim2.new(1, -4, 0, 42),
             Font        = T.FontMed,
             Text        = "",
             AutoButtonColor = false,
@@ -702,24 +712,24 @@ function PremiumMenu:CreateWindow(cfg)
 
         local TabIconLbl = Util.New("TextLabel", {
             BackgroundTransparency = 1,
-            Size        = UDim2.new(0, 32, 1, 0),
-            Position    = UDim2.new(0, 6, 0, 0),
+            Size        = UDim2.new(0, 34, 1, 0),
+            Position    = UDim2.new(0, 8, 0, 0),
             Font        = T.FontMed,
             Text        = tabIcon,
             TextColor3  = T.TxtLow,
-            TextSize    = 15,
+            TextSize    = 16,
             ZIndex      = 4,
             Parent      = TabBtn,
         })
 
         local TabLbl = Util.New("TextLabel", {
             BackgroundTransparency = 1,
-            Size        = UDim2.new(1, -46, 1, 0),
-            Position    = UDim2.new(0, 40, 0, 0),
+            Size        = UDim2.new(1, -50, 1, 0),
+            Position    = UDim2.new(0, 42, 0, 0),
             Font        = T.FontMed,
             Text        = tabName,
             TextColor3  = T.TxtMid,
-            TextSize    = 13,
+            TextSize    = 14,
             TextXAlignment = Enum.TextXAlignment.Left,
             ZIndex      = 4,
             Parent      = TabBtn,
@@ -727,7 +737,7 @@ function PremiumMenu:CreateWindow(cfg)
 
         local TabIndicator = Util.New("Frame", {
             BackgroundColor3 = T.Accent,
-            Size        = UDim2.new(0, 3, 0, 0),
+            Size        = UDim2.new(0, 4, 0, 0),
             Position    = UDim2.new(0, 0, 0.5, 0),
             AnchorPoint = Vector2.new(0, 0.5),
             BorderSizePixel = 0,
@@ -739,8 +749,8 @@ function PremiumMenu:CreateWindow(cfg)
         -- Content page
         local Page = Util.New("ScrollingFrame", {
             BackgroundTransparency = 1,
-            Size        = UDim2.new(1, -14, 1, -14),
-            Position    = UDim2.new(0, 7, 0, 7),
+            Size        = UDim2.new(1, -16, 1, -16),
+            Position    = UDim2.new(0, 8, 0, 8),
             CanvasSize  = UDim2.new(0, 0, 0, 0),
             AutomaticCanvasSize = Enum.AutomaticSize.Y,
             ScrollBarThickness  = 3,
@@ -750,8 +760,8 @@ function PremiumMenu:CreateWindow(cfg)
             ZIndex  = 2,
             Parent  = Content,
         })
-        Util.ListLayout(Page, Enum.FillDirection.Vertical, Enum.HorizontalAlignment.Center, Enum.VerticalAlignment.Top, UDim.new(0, 5))
-        Util.Padding(Page, 5, 5, 5, 5)
+        Util.ListLayout(Page, Enum.FillDirection.Vertical, Enum.HorizontalAlignment.Center, Enum.VerticalAlignment.Top, UDim.new(0, 8))
+        Util.Padding(Page, 6, 6, 6, 6)
 
         local td = {
             Btn = TabBtn, Page = Page,
@@ -762,27 +772,27 @@ function PremiumMenu:CreateWindow(cfg)
         local function Select()
             for _, t in ipairs(State.Tabs) do
                 t.Page.Visible = false
-                Util.Tween(t.Btn,     {BackgroundTransparency = 1},       0.18)
-                Util.Tween(t.Ind,     {Size = UDim2.new(0, 3, 0, 0)},    0.18)
-                Util.Tween(t.Lbl,     {TextColor3 = T.TxtMid},            0.18)
-                Util.Tween(t.IconLbl, {TextColor3 = T.TxtLow},            0.18)
+                Util.Tween(t.Btn,     {BackgroundTransparency = 1},       0.2)
+                Util.Tween(t.Ind,     {Size = UDim2.new(0, 4, 0, 0)},    0.2)
+                Util.Tween(t.Lbl,     {TextColor3 = T.TxtMid},            0.2)
+                Util.Tween(t.IconLbl, {TextColor3 = T.TxtLow},            0.2)
             end
             td.Page.Visible = true
             State.ActiveTab = td
-            Util.Tween(td.Btn,     {BackgroundTransparency = 0.65},   0.18)
-            Util.Tween(td.Ind,     {Size = UDim2.new(0, 3, 0, 22)},  0.22, Enum.EasingStyle.Back)
-            Util.Tween(td.Lbl,     {TextColor3 = T.TxtHigh},          0.18)
-            Util.Tween(td.IconLbl, {TextColor3 = T.Accent},           0.18)
+            Util.Tween(td.Btn,     {BackgroundTransparency = 0.6},    0.2)
+            Util.Tween(td.Ind,     {Size = UDim2.new(0, 4, 0, 24)},  0.25, Enum.EasingStyle.Back)
+            Util.Tween(td.Lbl,     {TextColor3 = T.TxtHigh},          0.2)
+            Util.Tween(td.IconLbl, {TextColor3 = T.Accent},           0.2)
         end
 
         TabBtn.MouseEnter:Connect(function()
             if State.ActiveTab ~= td then
-                Util.Tween(TabBtn, {BackgroundTransparency = 0.75}, 0.14)
+                Util.Tween(TabBtn, {BackgroundTransparency = 0.75}, 0.15)
             end
         end)
         TabBtn.MouseLeave:Connect(function()
             if State.ActiveTab ~= td then
-                Util.Tween(TabBtn, {BackgroundTransparency = 1}, 0.14)
+                Util.Tween(TabBtn, {BackgroundTransparency = 1}, 0.15)
             end
         end)
         TabBtn.MouseButton1Click:Connect(Select)
@@ -800,7 +810,7 @@ function PremiumMenu:CreateWindow(cfg)
         function Tab:CreateSection(name)
             local sf = Util.New("Frame", {
                 BackgroundTransparency = 1,
-                Size        = UDim2.new(1, 0, 0, 26),
+                Size        = UDim2.new(1, 0, 0, 30),
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex      = 3,
                 Parent      = Page,
@@ -808,7 +818,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             Util.New("Frame", {
                 BackgroundColor3 = T.Divider,
-                Size     = UDim2.new(0, 22, 0, 1),
+                Size     = UDim2.new(0, 24, 0, 1),
                 Position = UDim2.new(0, 0, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 BorderSizePixel = 0,
@@ -819,11 +829,11 @@ function PremiumMenu:CreateWindow(cfg)
             Util.New("TextLabel", {
                 BackgroundTransparency = 1,
                 Size     = UDim2.new(0.65, -5, 1, 0),
-                Position = UDim2.new(0, 28, 0, 0),
+                Position = UDim2.new(0, 32, 0, 0),
                 Font     = T.FontBold,
                 Text     = string.upper(name or "SECTION"),
                 TextColor3 = T.TxtLow,
-                TextSize = 10,
+                TextSize = 11,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 3,
                 Parent   = sf,
@@ -848,7 +858,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             local row = Util.New("Frame", {
                 BackgroundColor3 = T.Surface,
-                Size     = UDim2.new(1, 0, 0, 44),
+                Size     = UDim2.new(1, 0, 0, 46),
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex   = 3,
                 Parent   = Page,
@@ -858,12 +868,12 @@ function PremiumMenu:CreateWindow(cfg)
 
             Util.New("TextLabel", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(0.65, -14, 0, 18),
-                Position = UDim2.new(0, 14, 0, opts.Description and 5 or 13),
+                Size     = UDim2.new(0.65, -14, 0, 20),
+                Position = UDim2.new(0, 16, 0, opts.Description and 5 or 13),
                 Font     = T.FontMed,
                 Text     = opts.Name or "Toggle",
                 TextColor3 = T.TxtHigh,
-                TextSize = 13,
+                TextSize = 14,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 4,
                 Parent   = row,
@@ -873,11 +883,11 @@ function PremiumMenu:CreateWindow(cfg)
                 Util.New("TextLabel", {
                     BackgroundTransparency = 1,
                     Size     = UDim2.new(0.65, -14, 0, 14),
-                    Position = UDim2.new(0, 14, 0, 24),
+                    Position = UDim2.new(0, 16, 0, 26),
                     Font     = T.FontMed,
                     Text     = opts.Description,
                     TextColor3 = T.TxtLow,
-                    TextSize = 10,
+                    TextSize = 11,
                     TextXAlignment = Enum.TextXAlignment.Left,
                     ZIndex   = 4,
                     Parent   = row,
@@ -886,31 +896,33 @@ function PremiumMenu:CreateWindow(cfg)
 
             local track = Util.New("Frame", {
                 BackgroundColor3 = val and T.Accent or T.SurfaceAct,
-                Size     = UDim2.new(0, 44, 0, 24),
-                Position = UDim2.new(1, -58, 0.5, 0),
+                Size     = UDim2.new(0, 48, 0, 26),
+                Position = UDim2.new(1, -64, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 ZIndex   = 4,
                 Parent   = row,
             })
             Util.Corner(track, UDim.new(1, 0))
+            Util.Stroke(track, T.Border, 1)
 
             local knob = Util.New("Frame", {
                 BackgroundColor3 = Color3.new(1, 1, 1),
-                Size     = UDim2.new(0, 18, 0, 18),
-                Position = val and UDim2.new(1, -21, 0.5, 0) or UDim2.new(0, 3, 0.5, 0),
+                Size     = UDim2.new(0, 20, 0, 20),
+                Position = val and UDim2.new(1, -23, 0.5, 0) or UDim2.new(0, 3, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 ZIndex   = 5,
                 Parent   = track,
             })
             Util.Corner(knob, UDim.new(1, 0))
+            Util.Shadow(knob)
 
             local function Refresh()
                 if val then
-                    Util.Tween(track, {BackgroundColor3 = T.Accent}, 0.2)
-                    Util.Tween(knob,  {Position = UDim2.new(1, -21, 0.5, 0)}, 0.2, Enum.EasingStyle.Back)
+                    Util.Tween(track, {BackgroundColor3 = T.Accent}, 0.25)
+                    Util.Tween(knob,  {Position = UDim2.new(1, -23, 0.5, 0)}, 0.25, Enum.EasingStyle.Back)
                 else
-                    Util.Tween(track, {BackgroundColor3 = T.SurfaceAct}, 0.2)
-                    Util.Tween(knob,  {Position = UDim2.new(0, 3, 0.5, 0)}, 0.2, Enum.EasingStyle.Back)
+                    Util.Tween(track, {BackgroundColor3 = T.SurfaceAct}, 0.25)
+                    Util.Tween(knob,  {Position = UDim2.new(0, 3, 0.5, 0)}, 0.25, Enum.EasingStyle.Back)
                 end
                 if opts.Callback then opts.Callback(val) end
             end
@@ -931,7 +943,7 @@ function PremiumMenu:CreateWindow(cfg)
             return API
         end
 
-        -- ---- SLIDER ----
+        -- ---- SLIDER (With Text Input) ----
 
         function Tab:CreateSlider(opts)
             opts = opts or {}
@@ -942,7 +954,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             local row = Util.New("Frame", {
                 BackgroundColor3 = T.Surface,
-                Size     = UDim2.new(1, 0, 0, 54),
+                Size     = UDim2.new(1, 0, 0, 56),
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex   = 3,
                 Parent   = Page,
@@ -952,34 +964,36 @@ function PremiumMenu:CreateWindow(cfg)
 
             Util.New("TextLabel", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(0.65, -14, 0, 18),
-                Position = UDim2.new(0, 14, 0, 6),
+                Size     = UDim2.new(0.65, -14, 0, 20),
+                Position = UDim2.new(0, 16, 0, 6),
                 Font     = T.FontMed,
                 Text     = opts.Name or "Slider",
                 TextColor3 = T.TxtHigh,
-                TextSize = 13,
+                TextSize = 14,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 4,
                 Parent   = row,
             })
 
-            local ValLbl = Util.New("TextLabel", {
-                BackgroundTransparency = 1,
-                Size     = UDim2.new(0.3, -14, 0, 18),
-                Position = UDim2.new(0.7, 0, 0, 6),
+            -- Manual Input TextBox for slider
+            local ValInput = Util.New("TextBox", {
+                BackgroundColor3 = T.SurfaceAct,
+                Size     = UDim2.new(0, 60, 0, 22),
+                Position = UDim2.new(1, -76, 0, 5),
                 Font     = T.FontMono,
                 Text     = tostring(cur),
                 TextColor3 = T.Accent,
                 TextSize = 12,
-                TextXAlignment = Enum.TextXAlignment.Right,
-                ZIndex   = 4,
+                ZIndex   = 5,
                 Parent   = row,
             })
+            Util.Corner(ValInput, T.RadiusXs)
+            Util.Stroke(ValInput, T.Border, 1)
 
             local track = Util.New("Frame", {
                 BackgroundColor3 = T.SurfaceAct,
-                Size     = UDim2.new(1, -28, 0, 6),
-                Position = UDim2.new(0, 14, 0, 38),
+                Size     = UDim2.new(1, -32, 0, 6),
+                Position = UDim2.new(0, 16, 0, 40),
                 ZIndex   = 4,
                 Parent   = row,
             })
@@ -1005,8 +1019,17 @@ function PremiumMenu:CreateWindow(cfg)
             })
             Util.Corner(knob, UDim.new(1, 0))
             Util.Stroke(knob, T.Accent, 2)
+            Util.Shadow(knob)
 
             local dragging = false
+
+            local function UpdateVisuals()
+                local pct = (cur - min) / (max - min)
+                fill.Size     = UDim2.new(pct, 0, 1, 0)
+                knob.Position = UDim2.new(pct, 0, 0.5, 0)
+                ValInput.Text   = tostring(cur)
+                if opts.Callback then opts.Callback(cur) end
+            end
 
             local function ApplyX(px)
                 local abs  = track.AbsolutePosition.X
@@ -1014,11 +1037,7 @@ function PremiumMenu:CreateWindow(cfg)
                 local rel  = math.clamp((px - abs) / sz, 0, 1)
                 local raw  = min + (max - min) * rel
                 cur = math.clamp(math.floor(raw / step + 0.5) * step, min, max)
-                local pct = (cur - min) / (max - min)
-                fill.Size     = UDim2.new(pct, 0, 1, 0)
-                knob.Position = UDim2.new(pct, 0, 0.5, 0)
-                ValLbl.Text   = tostring(cur)
-                if opts.Callback then opts.Callback(cur) end
+                UpdateVisuals()
             end
 
             track.InputBegan:Connect(function(inp)
@@ -1038,13 +1057,18 @@ function PremiumMenu:CreateWindow(cfg)
                 end
             end)
 
+            ValInput.FocusLost:Connect(function()
+                local num = tonumber(ValInput.Text)
+                if num then
+                    cur = math.clamp(math.floor(num / step + 0.5) * step, min, max)
+                end
+                UpdateVisuals()
+            end)
+
             local API = {}
             function API:Set(v)
                 cur = math.clamp(v, min, max)
-                local p = (cur - min) / (max - min)
-                fill.Size = UDim2.new(p, 0, 1, 0)
-                knob.Position = UDim2.new(p, 0, 0.5, 0)
-                ValLbl.Text = tostring(cur)
+                UpdateVisuals()
             end
             function API:Get() return cur end
             return API
@@ -1057,7 +1081,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             local row = Util.New("Frame", {
                 BackgroundColor3 = T.Surface,
-                Size     = UDim2.new(1, 0, 0, 40),
+                Size     = UDim2.new(1, 0, 0, 42),
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex   = 3,
                 Parent   = Page,
@@ -1068,11 +1092,11 @@ function PremiumMenu:CreateWindow(cfg)
             Util.New("TextLabel", {
                 BackgroundTransparency = 1,
                 Size     = UDim2.new(0.65, -14, 1, 0),
-                Position = UDim2.new(0, 14, 0, 0),
+                Position = UDim2.new(0, 16, 0, 0),
                 Font     = T.FontMed,
                 Text     = opts.Name or "Button",
                 TextColor3 = T.TxtHigh,
-                TextSize = 13,
+                TextSize = 14,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 4,
                 Parent   = row,
@@ -1080,28 +1104,28 @@ function PremiumMenu:CreateWindow(cfg)
 
             local btn = Util.New("TextButton", {
                 BackgroundColor3 = T.Accent,
-                Size     = UDim2.new(0, 72, 0, 28),
-                Position = UDim2.new(1, -84, 0.5, 0),
+                Size     = UDim2.new(0, 76, 0, 30),
+                Position = UDim2.new(1, -92, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 Font     = T.FontBold,
                 Text     = opts.ButtonText or "Run",
                 TextColor3 = Color3.new(1, 1, 1),
-                TextSize = 12,
+                TextSize = 13,
                 AutoButtonColor = false,
                 ZIndex   = 5,
                 Parent   = row,
             })
             Util.Corner(btn, T.RadiusSm)
 
-            btn.MouseEnter:Connect(function() Util.Tween(btn, {BackgroundColor3 = T.AccentHov}, 0.14) end)
-            btn.MouseLeave:Connect(function() Util.Tween(btn, {BackgroundColor3 = T.Accent},    0.14) end)
+            btn.MouseEnter:Connect(function() Util.Tween(btn, {BackgroundColor3 = T.AccentHov}, 0.15) end)
+            btn.MouseLeave:Connect(function() Util.Tween(btn, {BackgroundColor3 = T.Accent},    0.15) end)
             btn.MouseButton1Click:Connect(function()
                 Util.Ripple(btn)
                 if opts.Callback then opts.Callback() end
             end)
         end
 
-        -- ---- DROPDOWN ----
+        -- ---- DROPDOWN (Scrollable) ----
 
         function Tab:CreateDropdown(opts)
             opts = opts or {}
@@ -1111,7 +1135,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             local wrap = Util.New("Frame", {
                 BackgroundColor3 = T.Surface,
-                Size     = UDim2.new(1, 0, 0, 42),
+                Size     = UDim2.new(1, 0, 0, 44),
                 ClipsDescendants = true,
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex   = 3,
@@ -1121,12 +1145,12 @@ function PremiumMenu:CreateWindow(cfg)
 
             Util.New("TextLabel", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(0.45, -8, 0, 42),
-                Position = UDim2.new(0, 14, 0, 0),
+                Size     = UDim2.new(0.45, -8, 0, 44),
+                Position = UDim2.new(0, 16, 0, 0),
                 Font     = T.FontMed,
                 Text     = opts.Name or "Dropdown",
                 TextColor3 = T.TxtHigh,
-                TextSize = 13,
+                TextSize = 14,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 4,
                 Parent   = wrap,
@@ -1134,53 +1158,61 @@ function PremiumMenu:CreateWindow(cfg)
 
             local selBtn = Util.New("TextButton", {
                 BackgroundColor3 = T.SurfaceAct,
-                Size     = UDim2.new(0.5, -14, 0, 28),
+                Size     = UDim2.new(0.5, -16, 0, 30),
                 Position = UDim2.new(0.5, 0, 0, 7),
                 Font     = T.FontMed,
                 Text     = current .. "  v",
                 TextColor3 = T.TxtMid,
-                TextSize = 12,
+                TextSize = 13,
                 AutoButtonColor = false,
                 ZIndex   = 5,
                 Parent   = wrap,
             })
             Util.Corner(selBtn, T.RadiusXs)
+            Util.Stroke(selBtn, T.Border, 1)
 
-            local itemBox = Util.New("Frame", {
+            -- Scrollable Item Container
+            local itemScroll = Util.New("ScrollingFrame", {
                 BackgroundTransparency = 1,
                 Size     = UDim2.new(1, -16, 0, 0),
-                Position = UDim2.new(0, 8, 0, 44),
+                Position = UDim2.new(0, 8, 0, 46),
+                CanvasSize = UDim2.new(0, 0, 0, 0),
+                AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                ScrollBarThickness = 3,
+                ScrollBarImageColor3 = T.Scrollbar,
+                BorderSizePixel = 0,
                 ZIndex   = 5,
                 Parent   = wrap,
             })
-            Util.ListLayout(itemBox, Enum.FillDirection.Vertical, Enum.HorizontalAlignment.Center, Enum.VerticalAlignment.Top, UDim.new(0, 3))
+            Util.ListLayout(itemScroll, Enum.FillDirection.Vertical, Enum.HorizontalAlignment.Center, Enum.VerticalAlignment.Top, UDim.new(0, 4))
+            Util.Padding(itemScroll, 0, 4, 4, 0)
 
             local function BuildItems()
-                for _, c in ipairs(itemBox:GetChildren()) do
+                for _, c in ipairs(itemScroll:GetChildren()) do
                     if c:IsA("TextButton") then c:Destroy() end
                 end
                 for i, item in ipairs(items) do
                     local ib = Util.New("TextButton", {
                         BackgroundColor3 = T.SurfaceHov,
-                        BackgroundTransparency = 0.4,
-                        Size     = UDim2.new(1, 0, 0, 28),
+                        BackgroundTransparency = 0.5,
+                        Size     = UDim2.new(1, 0, 0, 30),
                         Font     = T.FontMed,
                         Text     = item,
                         TextColor3 = item == current and T.Accent or T.TxtMid,
-                        TextSize = 12,
+                        TextSize = 13,
                         AutoButtonColor = false,
                         LayoutOrder = i,
                         ZIndex   = 6,
-                        Parent   = itemBox,
+                        Parent   = itemScroll,
                     })
                     Util.Corner(ib, T.RadiusXs)
-                    ib.MouseEnter:Connect(function() Util.Tween(ib, {BackgroundTransparency = 0, TextColor3 = T.TxtHigh}, 0.12) end)
-                    ib.MouseLeave:Connect(function() Util.Tween(ib, {BackgroundTransparency = 0.4, TextColor3 = item == current and T.Accent or T.TxtMid}, 0.12) end)
+                    ib.MouseEnter:Connect(function() Util.Tween(ib, {BackgroundTransparency = 0, TextColor3 = T.TxtHigh}, 0.15) end)
+                    ib.MouseLeave:Connect(function() Util.Tween(ib, {BackgroundTransparency = 0.5, TextColor3 = item == current and T.Accent or T.TxtMid}, 0.15) end)
                     ib.MouseButton1Click:Connect(function()
                         current = item
                         selBtn.Text = item .. "  v"
                         open = false
-                        Util.Tween(wrap, {Size = UDim2.new(1, 0, 0, 42)}, 0.22)
+                        Util.Tween(wrap, {Size = UDim2.new(1, 0, 0, 44)}, 0.25)
                         BuildItems()
                         if opts.Callback then opts.Callback(item) end
                     end)
@@ -1191,10 +1223,13 @@ function PremiumMenu:CreateWindow(cfg)
             selBtn.MouseButton1Click:Connect(function()
                 open = not open
                 if open then
-                    Util.Tween(wrap, {Size = UDim2.new(1, 0, 0, 48 + #items * 31)}, 0.28, Enum.EasingStyle.Back)
+                    -- Calc height (max 4 items visible without scrolling = ~136px)
+                    local listHeight = math.min(#items * 34, 140)
+                    Util.Tween(itemScroll, {Size = UDim2.new(1, -16, 0, listHeight)}, 0.25)
+                    Util.Tween(wrap, {Size = UDim2.new(1, 0, 0, 46 + listHeight)}, 0.3, Enum.EasingStyle.Back)
                     selBtn.Text = current .. "  ^"
                 else
-                    Util.Tween(wrap, {Size = UDim2.new(1, 0, 0, 42)}, 0.22)
+                    Util.Tween(wrap, {Size = UDim2.new(1, 0, 0, 44)}, 0.25)
                     selBtn.Text = current .. "  v"
                 end
             end)
@@ -1210,6 +1245,160 @@ function PremiumMenu:CreateWindow(cfg)
             return API
         end
 
+        -- ---- MULTI-DROPDOWN ----
+
+        function Tab:CreateMultiDropdown(opts)
+            opts = opts or {}
+            local items   = opts.Items   or {}
+            local current = opts.Default or {} -- array of strings
+            local open    = false
+
+            -- Ensure current is table
+            if type(current) ~= "table" then current = {current} end
+            
+            -- Helper to check if item is selected
+            local function IsSelected(item)
+                for _, v in ipairs(current) do
+                    if v == item then return true end
+                end
+                return false
+            end
+
+            local wrap = Util.New("Frame", {
+                BackgroundColor3 = T.Surface,
+                Size     = UDim2.new(1, 0, 0, 44),
+                ClipsDescendants = true,
+                LayoutOrder = #Page:GetChildren(),
+                ZIndex   = 3,
+                Parent   = Page,
+            })
+            Util.Corner(wrap, T.RadiusSm)
+
+            Util.New("TextLabel", {
+                BackgroundTransparency = 1,
+                Size     = UDim2.new(0.45, -8, 0, 44),
+                Position = UDim2.new(0, 16, 0, 0),
+                Font     = T.FontMed,
+                Text     = opts.Name or "Multi Dropdown",
+                TextColor3 = T.TxtHigh,
+                TextSize = 14,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                ZIndex   = 4,
+                Parent   = wrap,
+            })
+
+            local function GetPreviewText()
+                if #current == 0 then return "None  v" end
+                if #current == 1 then return current[1] .. "  v" end
+                return #current .. " Selected  v"
+            end
+
+            local selBtn = Util.New("TextButton", {
+                BackgroundColor3 = T.SurfaceAct,
+                Size     = UDim2.new(0.5, -16, 0, 30),
+                Position = UDim2.new(0.5, 0, 0, 7),
+                Font     = T.FontMed,
+                Text     = GetPreviewText(),
+                TextColor3 = T.TxtMid,
+                TextSize = 13,
+                AutoButtonColor = false,
+                ZIndex   = 5,
+                Parent   = wrap,
+            })
+            Util.Corner(selBtn, T.RadiusXs)
+            Util.Stroke(selBtn, T.Border, 1)
+
+            local itemScroll = Util.New("ScrollingFrame", {
+                BackgroundTransparency = 1,
+                Size     = UDim2.new(1, -16, 0, 0),
+                Position = UDim2.new(0, 8, 0, 46),
+                CanvasSize = UDim2.new(0, 0, 0, 0),
+                AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                ScrollBarThickness = 3,
+                ScrollBarImageColor3 = T.Scrollbar,
+                BorderSizePixel = 0,
+                ZIndex   = 5,
+                Parent   = wrap,
+            })
+            Util.ListLayout(itemScroll, Enum.FillDirection.Vertical, Enum.HorizontalAlignment.Center, Enum.VerticalAlignment.Top, UDim.new(0, 4))
+            Util.Padding(itemScroll, 0, 4, 4, 0)
+
+            local function BuildItems()
+                for _, c in ipairs(itemScroll:GetChildren()) do
+                    if c:IsA("TextButton") then c:Destroy() end
+                end
+                for i, item in ipairs(items) do
+                    local selected = IsSelected(item)
+                    local ib = Util.New("TextButton", {
+                        BackgroundColor3 = T.SurfaceHov,
+                        BackgroundTransparency = 0.5,
+                        Size     = UDim2.new(1, 0, 0, 30),
+                        Font     = T.FontMed,
+                        Text     = item,
+                        TextColor3 = selected and T.Accent or T.TxtMid,
+                        TextSize = 13,
+                        AutoButtonColor = false,
+                        LayoutOrder = i,
+                        ZIndex   = 6,
+                        Parent   = itemScroll,
+                    })
+                    Util.Corner(ib, T.RadiusXs)
+                    
+                    local check = Util.New("Frame", {
+                        BackgroundColor3 = selected and T.Accent or T.SurfaceAct,
+                        Size = UDim2.new(0, 16, 0, 16),
+                        Position = UDim2.new(1, -24, 0.5, 0),
+                        AnchorPoint = Vector2.new(0, 0.5),
+                        ZIndex = 7,
+                        Parent = ib,
+                    })
+                    Util.Corner(check, T.RadiusXs)
+
+                    ib.MouseEnter:Connect(function() Util.Tween(ib, {BackgroundTransparency = 0, TextColor3 = T.TxtHigh}, 0.15) end)
+                    ib.MouseLeave:Connect(function() Util.Tween(ib, {BackgroundTransparency = 0.5, TextColor3 = selected and T.Accent or T.TxtMid}, 0.15) end)
+                    
+                    ib.MouseButton1Click:Connect(function()
+                        if IsSelected(item) then
+                            -- Remove
+                            for idx, v in ipairs(current) do
+                                if v == item then table.remove(current, idx); break end
+                            end
+                        else
+                            -- Add
+                            table.insert(current, item)
+                        end
+                        selBtn.Text = string.gsub(GetPreviewText(), "v", open and "^" or "v")
+                        BuildItems()
+                        if opts.Callback then opts.Callback(current) end
+                    end)
+                end
+            end
+            BuildItems()
+
+            selBtn.MouseButton1Click:Connect(function()
+                open = not open
+                if open then
+                    local listHeight = math.min(#items * 34, 140)
+                    Util.Tween(itemScroll, {Size = UDim2.new(1, -16, 0, listHeight)}, 0.25)
+                    Util.Tween(wrap, {Size = UDim2.new(1, 0, 0, 46 + listHeight)}, 0.3, Enum.EasingStyle.Back)
+                    selBtn.Text = string.gsub(selBtn.Text, "v", "^")
+                else
+                    Util.Tween(wrap, {Size = UDim2.new(1, 0, 0, 44)}, 0.25)
+                    selBtn.Text = string.gsub(selBtn.Text, "%^", "v")
+                end
+            end)
+
+            local API = {}
+            function API:Set(v) current = type(v) == "table" and v or {v}; selBtn.Text = GetPreviewText(); BuildItems() end
+            function API:Refresh(list, def)
+                items = list
+                if def then current = type(def) == "table" and def or {def}; selBtn.Text = GetPreviewText() end
+                BuildItems()
+            end
+            function API:Get() return current end
+            return API
+        end
+
         -- ---- INPUT ----
 
         function Tab:CreateInput(opts)
@@ -1217,7 +1406,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             local row = Util.New("Frame", {
                 BackgroundColor3 = T.Surface,
-                Size     = UDim2.new(1, 0, 0, 42),
+                Size     = UDim2.new(1, 0, 0, 44),
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex   = 3,
                 Parent   = Page,
@@ -1228,11 +1417,11 @@ function PremiumMenu:CreateWindow(cfg)
             Util.New("TextLabel", {
                 BackgroundTransparency = 1,
                 Size     = UDim2.new(0.4, -8, 1, 0),
-                Position = UDim2.new(0, 14, 0, 0),
+                Position = UDim2.new(0, 16, 0, 0),
                 Font     = T.FontMed,
                 Text     = opts.Name or "Input",
                 TextColor3 = T.TxtHigh,
-                TextSize = 13,
+                TextSize = 14,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 4,
                 Parent   = row,
@@ -1240,7 +1429,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             local box = Util.New("TextBox", {
                 BackgroundColor3 = T.SurfaceAct,
-                Size     = UDim2.new(0.55, -14, 0, 28),
+                Size     = UDim2.new(0.55, -16, 0, 30),
                 Position = UDim2.new(0.45, 0, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 Font     = T.FontMed,
@@ -1248,7 +1437,7 @@ function PremiumMenu:CreateWindow(cfg)
                 PlaceholderColor3 = T.TxtLow,
                 Text     = opts.Default or "",
                 TextColor3 = T.TxtHigh,
-                TextSize = 12,
+                TextSize = 13,
                 ClearTextOnFocus = opts.ClearOnFocus or false,
                 ZIndex   = 5,
                 Parent   = row,
@@ -1258,10 +1447,10 @@ function PremiumMenu:CreateWindow(cfg)
             local bstroke = Util.Stroke(box, T.Border, 1, 0.5)
 
             box.Focused:Connect(function()
-                Util.Tween(bstroke, {Color = T.Accent, Transparency = 0}, 0.18)
+                Util.Tween(bstroke, {Color = T.Accent, Transparency = 0}, 0.2)
             end)
             box.FocusLost:Connect(function(enter)
-                Util.Tween(bstroke, {Color = T.Border, Transparency = 0.5}, 0.18)
+                Util.Tween(bstroke, {Color = T.Border, Transparency = 0.5}, 0.2)
                 if opts.Callback then opts.Callback(box.Text, enter) end
             end)
 
@@ -1280,7 +1469,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             local row = Util.New("Frame", {
                 BackgroundColor3 = T.Surface,
-                Size     = UDim2.new(1, 0, 0, 42),
+                Size     = UDim2.new(1, 0, 0, 44),
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex   = 3,
                 Parent   = Page,
@@ -1291,11 +1480,11 @@ function PremiumMenu:CreateWindow(cfg)
             Util.New("TextLabel", {
                 BackgroundTransparency = 1,
                 Size     = UDim2.new(0.65, -14, 1, 0),
-                Position = UDim2.new(0, 14, 0, 0),
+                Position = UDim2.new(0, 16, 0, 0),
                 Font     = T.FontMed,
                 Text     = opts.Name or "Keybind",
                 TextColor3 = T.TxtHigh,
-                TextSize = 13,
+                TextSize = 14,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 4,
                 Parent   = row,
@@ -1303,13 +1492,13 @@ function PremiumMenu:CreateWindow(cfg)
 
             local kbtn = Util.New("TextButton", {
                 BackgroundColor3 = T.SurfaceAct,
-                Size     = UDim2.new(0, 74, 0, 28),
-                Position = UDim2.new(1, -86, 0.5, 0),
+                Size     = UDim2.new(0, 80, 0, 30),
+                Position = UDim2.new(1, -96, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 Font     = T.FontMono,
                 Text     = key.Name,
                 TextColor3 = T.Accent,
-                TextSize = 12,
+                TextSize = 13,
                 AutoButtonColor = false,
                 ZIndex   = 5,
                 Parent   = row,
@@ -1320,7 +1509,7 @@ function PremiumMenu:CreateWindow(cfg)
             kbtn.MouseButton1Click:Connect(function()
                 listening = true
                 kbtn.Text = "..."
-                Util.Tween(kbtn, {BackgroundColor3 = T.Accent}, 0.14)
+                Util.Tween(kbtn, {BackgroundColor3 = T.Accent}, 0.15)
                 kbtn.TextColor3 = Color3.new(1, 1, 1)
             end)
 
@@ -1329,7 +1518,7 @@ function PremiumMenu:CreateWindow(cfg)
                     listening = false
                     key = inp.KeyCode
                     kbtn.Text = key.Name
-                    Util.Tween(kbtn, {BackgroundColor3 = T.SurfaceAct}, 0.14)
+                    Util.Tween(kbtn, {BackgroundColor3 = T.SurfaceAct}, 0.15)
                     kbtn.TextColor3 = T.Accent
                     if opts.Callback then opts.Callback(key) end
                 end
@@ -1349,7 +1538,7 @@ function PremiumMenu:CreateWindow(cfg)
             local row = Util.New("Frame", {
                 BackgroundColor3       = T.Surface,
                 BackgroundTransparency = 0.35,
-                Size     = UDim2.new(1, 0, 0, 32),
+                Size     = UDim2.new(1, 0, 0, 34),
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex   = 3,
                 Parent   = Page,
@@ -1359,7 +1548,7 @@ function PremiumMenu:CreateWindow(cfg)
             local dot = Util.New("Frame", {
                 BackgroundColor3 = T.Accent,
                 Size     = UDim2.new(0, 6, 0, 6),
-                Position = UDim2.new(0, 12, 0.5, 0),
+                Position = UDim2.new(0, 14, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 ZIndex   = 4,
                 Parent   = row,
@@ -1368,12 +1557,12 @@ function PremiumMenu:CreateWindow(cfg)
 
             local lbl = Util.New("TextLabel", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(1, -30, 1, 0),
-                Position = UDim2.new(0, 26, 0, 0),
+                Size     = UDim2.new(1, -34, 1, 0),
+                Position = UDim2.new(0, 28, 0, 0),
                 Font     = T.FontMed,
                 Text     = opts.Text or "Label",
                 TextColor3 = T.TxtMid,
-                TextSize = 12,
+                TextSize = 13,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 4,
                 Parent   = row,
@@ -1385,6 +1574,70 @@ function PremiumMenu:CreateWindow(cfg)
             return API
         end
 
+        -- ---- PARAGRAPH (Multi-line text) ----
+
+        function Tab:CreateParagraph(opts)
+            opts = opts or {}
+            
+            local text = opts.Text or "Paragraph text"
+            local title = opts.Title or "Information"
+
+            local row = Util.New("Frame", {
+                BackgroundColor3 = T.Surface,
+                Size     = UDim2.new(1, 0, 0, 60), -- Initial size, will adjust
+                LayoutOrder = #Page:GetChildren(),
+                ZIndex   = 3,
+                Parent   = Page,
+            })
+            Util.Corner(row, T.RadiusSm)
+            Util.Stroke(row, T.Border, 1, 0.5)
+
+            local titleLbl = Util.New("TextLabel", {
+                BackgroundTransparency = 1,
+                Size     = UDim2.new(1, -24, 0, 20),
+                Position = UDim2.new(0, 12, 0, 8),
+                Font     = T.FontBold,
+                Text     = title,
+                TextColor3 = T.TxtHigh,
+                TextSize = 14,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                ZIndex   = 4,
+                Parent   = row,
+            })
+
+            local textLbl = Util.New("TextLabel", {
+                BackgroundTransparency = 1,
+                Size     = UDim2.new(1, -24, 0, 0),
+                Position = UDim2.new(0, 12, 0, 30),
+                Font     = T.FontMed,
+                Text     = text,
+                TextColor3 = T.TxtMid,
+                TextSize = 13,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                TextYAlignment = Enum.TextYAlignment.Top,
+                TextWrapped = true,
+                ZIndex   = 4,
+                Parent   = row,
+            })
+
+            local function AdjustSize()
+                local bounds = Util.GetTextBounds(textLbl.Text, T.FontMed, 13, Vector2.new(Page.AbsoluteSize.X - 40, 10000))
+                textLbl.Size = UDim2.new(1, -24, 0, bounds.Y)
+                row.Size = UDim2.new(1, 0, 0, bounds.Y + 42)
+            end
+
+            -- Need to wait a tick for AbsoluteSize to be accurate in some executors
+            task.delay(0.1, AdjustSize)
+
+            local API = {}
+            function API:Set(newProps) 
+                if newProps.Title then titleLbl.Text = newProps.Title end
+                if newProps.Text then textLbl.Text = newProps.Text end
+                AdjustSize()
+            end
+            return API
+        end
+
         -- ---- COLOR PICKER (swatch) ----
 
         function Tab:CreateColorPicker(opts)
@@ -1393,7 +1646,7 @@ function PremiumMenu:CreateWindow(cfg)
 
             local row = Util.New("Frame", {
                 BackgroundColor3 = T.Surface,
-                Size     = UDim2.new(1, 0, 0, 42),
+                Size     = UDim2.new(1, 0, 0, 44),
                 LayoutOrder = #Page:GetChildren(),
                 ZIndex   = 3,
                 Parent   = Page,
@@ -1404,11 +1657,11 @@ function PremiumMenu:CreateWindow(cfg)
             Util.New("TextLabel", {
                 BackgroundTransparency = 1,
                 Size     = UDim2.new(0.65, -14, 1, 0),
-                Position = UDim2.new(0, 14, 0, 0),
+                Position = UDim2.new(0, 16, 0, 0),
                 Font     = T.FontMed,
                 Text     = opts.Name or "Color",
                 TextColor3 = T.TxtHigh,
-                TextSize = 13,
+                TextSize = 14,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 4,
                 Parent   = row,
@@ -1416,13 +1669,13 @@ function PremiumMenu:CreateWindow(cfg)
 
             local swatch = Util.New("Frame", {
                 BackgroundColor3 = color,
-                Size     = UDim2.new(0, 30, 0, 30),
-                Position = UDim2.new(1, -44, 0.5, 0),
+                Size     = UDim2.new(0, 32, 0, 32),
+                Position = UDim2.new(1, -48, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 ZIndex   = 5,
                 Parent   = row,
             })
-            Util.Corner(swatch, UDim.new(0, 7))
+            Util.Corner(swatch, UDim.new(0, 6))
             Util.Stroke(swatch, T.Border, 1)
 
             local API = {}
@@ -1486,17 +1739,19 @@ function PremiumMenu:CreateWindow(cfg)
 
     if WCfg.TutorialMode then
         task.spawn(function()
-            task.wait(0.85)
+            task.wait(1)
 
             local Pages = {
                 {
                     Title = "Welcome to PremiumMenu v3",
                     Body  = {
-                        "Welcome! PremiumMenu is a premium Roblox Luau",
+                        "Welcome! PremiumMenu v3 is a premium Roblox Luau",
                         "UI framework for building clean script hubs.",
                         "",
-                        "This tutorial shows you how to use every feature.",
-                        "Disable this guide anytime by setting:",
+                        "New features include Scrollable Dropdowns,",
+                        "Multi-Selects, Paragraphs, and Manual Slider Input.",
+                        "",
+                        "To disable this guide, add to your config:",
                     },
                     Code = "TutorialMode = false",
                 },
@@ -1529,7 +1784,7 @@ function PremiumMenu:CreateWindow(cfg)
                     Body = {
                         "Every element type available in PremiumMenu v3:",
                     },
-                    Code = 'Tab:CreateButton({\n    Name = "Teleport", ButtonText = "Go",\n    Callback = function() end,\n})\n\nTab:CreateDropdown({\n    Name  = "Mode",\n    Items = {"Option A", "Option B", "Option C"},\n    Default = "Option A",\n    Callback = function(v) print(v) end,\n})\n\nTab:CreateInput({\n    Name        = "Player Name",\n    Placeholder = "Type name...",\n    Callback    = function(text, entered)\n        if entered then print(text) end\n    end,\n})\n\nTab:CreateKeybind({\n    Name     = "Toggle Aimbot",\n    Default  = Enum.KeyCode.Q,\n    Callback = function(k) print(k.Name) end,\n})\n\nTab:CreateColorPicker({\n    Name     = "ESP Color",\n    Default  = Color3.fromRGB(255, 50, 50),\n    Callback = function(c) print(c) end,\n})\n\nTab:CreateLabel({ Text = "PremiumMenu v3  |  by loffy327" })',
+                    Code = 'Tab:CreateButton({ Name = "Teleport", ButtonText = "Go", Callback = function() end })\n\nTab:CreateDropdown({\n    Name  = "Mode",\n    Items = {"Option A", "Option B", "Option C"},\n    Default = "Option A",\n    Callback = function(v) print(v) end,\n})\n\nTab:CreateMultiDropdown({\n    Name  = "ESP Options",\n    Items = {"Players", "Items", "Chests"},\n    Default = {"Players"},\n    Callback = function(table) print(table) end,\n})\n\nTab:CreateInput({ Name = "Player", Placeholder = "Type...", Callback = function(t, e) end })\n\nTab:CreateKeybind({ Name = "Toggle", Default = Enum.KeyCode.Q, Callback = function(k) end })\n\nTab:CreateParagraph({ Title = "Info", Text = "This is a long multi-line paragraph block." })',
                 },
                 {
                     Title = "Step 5  |  Notifications and Config",
@@ -1545,7 +1800,7 @@ function PremiumMenu:CreateWindow(cfg)
                         "Use ReplicatedStorage to find remotes by name.",
                         "FireServer sends data, InvokeServer returns data.",
                     },
-                    Code = 'local RS = game:GetService("ReplicatedStorage")\n\nTab:CreateButton({\n    Name = "Fire Remote Event",\n    ButtonText = "Fire",\n    Callback = function()\n        local re = RS:FindFirstChild("MyEvent")\n        if re and re:IsA("RemoteEvent") then\n            re:FireServer("data", 123)\n            Window:Notify({\n                Title   = "Fired",\n                Content = "MyEvent sent to server.",\n                Type    = "Success",\n            })\n        else\n            Window:Notify({\n                Title   = "Not Found",\n                Content = "RemoteEvent not found.",\n                Type    = "Error",\n            })\n        end\n    end,\n})\n\nTab:CreateInput({\n    Name        = "Remote Name",\n    Placeholder = "RemoteEvent name...",\n    Callback    = function(text, enter)\n        if not enter then return end\n        local re = RS:FindFirstChild(text)\n        if re and re:IsA("RemoteEvent") then\n            re:FireServer()\n        end\n    end,\n})\n\nTab:CreateButton({\n    Name = "Invoke RemoteFunction",\n    ButtonText = "Invoke",\n    Callback = function()\n        local rf = RS:FindFirstChild("MyFunction")\n        if rf and rf:IsA("RemoteFunction") then\n            local result = rf:InvokeServer("query")\n            print("Server returned:", result)\n        end\n    end,\n})',
+                    Code = 'local RS = game:GetService("ReplicatedStorage")\n\nTab:CreateButton({\n    Name = "Fire Remote Event",\n    ButtonText = "Fire",\n    Callback = function()\n        local re = RS:FindFirstChild("MyEvent")\n        if re and re:IsA("RemoteEvent") then\n            re:FireServer("data", 123)\n            Window:Notify({\n                Title   = "Fired",\n                Content = "MyEvent sent to server.",\n                Type    = "Success",\n            })\n        end\n    end,\n})\n\nTab:CreateInput({\n    Name        = "Remote Name",\n    Placeholder = "RemoteEvent name...",\n    Callback    = function(text, enter)\n        if not enter then return end\n        local re = RS:FindFirstChild(text)\n        if re and re:IsA("RemoteEvent") then\n            re:FireServer()\n        end\n    end,\n})\n',
                 },
                 {
                     Title = "You Are Ready!",
@@ -1586,12 +1841,12 @@ function PremiumMenu:CreateWindow(cfg)
                 Parent  = Gui,
             })
             Util.Corner(Card, T.RadiusLg)
-            Util.Stroke(Card, T.Accent, 1, 0.25)
+            Util.Stroke(Card, T.Accent, 1, 0.3)
             Util.Shadow(Card)
 
             Util.Tween(Overlay, {BackgroundTransparency = 0.4}, 0.38)
             Util.Tween(Card, {
-                Size = UDim2.new(0, 520, 0, 450),
+                Size = UDim2.new(0, 540, 0, 480),
                 BackgroundTransparency = 0,
             }, 0.48, Enum.EasingStyle.Back)
 
@@ -1607,7 +1862,7 @@ function PremiumMenu:CreateWindow(cfg)
             -- Header
             local Hdr = Util.New("Frame", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(1, 0, 0, 52),
+                Size     = UDim2.new(1, 0, 0, 56),
                 Position = UDim2.new(0, 0, 0, 4),
                 ZIndex   = 62,
                 Parent   = Card,
@@ -1615,12 +1870,12 @@ function PremiumMenu:CreateWindow(cfg)
 
             local HdrTitle = Util.New("TextLabel", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(1, -60, 0, 24),
-                Position = UDim2.new(0, 18, 0, 6),
+                Size     = UDim2.new(1, -60, 0, 26),
+                Position = UDim2.new(0, 20, 0, 8),
                 Font     = T.FontBold,
                 Text     = Pages[1].Title,
                 TextColor3 = T.TxtHigh,
-                TextSize = 16,
+                TextSize = 17,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 63,
                 Parent   = Hdr,
@@ -1628,12 +1883,12 @@ function PremiumMenu:CreateWindow(cfg)
 
             local HdrSub = Util.New("TextLabel", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(1, -60, 0, 14),
-                Position = UDim2.new(0, 18, 0, 34),
+                Size     = UDim2.new(1, -60, 0, 16),
+                Position = UDim2.new(0, 20, 0, 36),
                 Font     = T.FontMed,
                 Text     = "Step 1 of " .. #Pages,
                 TextColor3 = T.TxtLow,
-                TextSize = 11,
+                TextSize = 12,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 ZIndex   = 63,
                 Parent   = Hdr,
@@ -1642,25 +1897,25 @@ function PremiumMenu:CreateWindow(cfg)
             -- X Close button
             local XBtn = Util.New("TextButton", {
                 BackgroundColor3 = T.SurfaceAct,
-                Size     = UDim2.new(0, 30, 0, 30),
-                Position = UDim2.new(1, -44, 0, 12),
+                Size     = UDim2.new(0, 32, 0, 32),
+                Position = UDim2.new(1, -48, 0, 14),
                 Font     = T.FontBold,
                 Text     = "X",
                 TextColor3 = T.TxtMid,
-                TextSize = 14,
+                TextSize = 15,
                 AutoButtonColor = false,
                 ZIndex   = 64,
                 Parent   = Hdr,
             })
             Util.Corner(XBtn, T.RadiusSm)
-            XBtn.MouseEnter:Connect(function() Util.Tween(XBtn, {BackgroundColor3 = T.Red, TextColor3 = Color3.new(1,1,1)}, 0.14) end)
-            XBtn.MouseLeave:Connect(function() Util.Tween(XBtn, {BackgroundColor3 = T.SurfaceAct, TextColor3 = T.TxtMid}, 0.14) end)
+            XBtn.MouseEnter:Connect(function() Util.Tween(XBtn, {BackgroundColor3 = T.Red, TextColor3 = Color3.new(1,1,1)}, 0.15) end)
+            XBtn.MouseLeave:Connect(function() Util.Tween(XBtn, {BackgroundColor3 = T.SurfaceAct, TextColor3 = T.TxtMid}, 0.15) end)
 
             -- Divider
             Util.New("Frame", {
                 BackgroundColor3 = T.Divider,
-                Size     = UDim2.new(1, -32, 0, 1),
-                Position = UDim2.new(0, 16, 0, 58),
+                Size     = UDim2.new(1, -36, 0, 1),
+                Position = UDim2.new(0, 18, 0, 62),
                 BorderSizePixel = 0,
                 ZIndex   = 62,
                 Parent   = Card,
@@ -1669,23 +1924,23 @@ function PremiumMenu:CreateWindow(cfg)
             -- Body scroll
             local Body2 = Util.New("ScrollingFrame", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(1, -32, 1, -125),
-                Position = UDim2.new(0, 16, 0, 64),
+                Size     = UDim2.new(1, -36, 1, -140),
+                Position = UDim2.new(0, 18, 0, 68),
                 CanvasSize = UDim2.new(0, 0, 0, 0),
                 AutomaticCanvasSize = Enum.AutomaticSize.Y,
-                ScrollBarThickness  = 3,
+                ScrollBarThickness  = 4,
                 ScrollBarImageColor3 = T.Scrollbar,
                 BorderSizePixel = 0,
                 ZIndex  = 62,
                 Parent  = Card,
             })
-            Util.ListLayout(Body2, Enum.FillDirection.Vertical, Enum.HorizontalAlignment.Left, Enum.VerticalAlignment.Top, UDim.new(0, 5))
+            Util.ListLayout(Body2, Enum.FillDirection.Vertical, Enum.HorizontalAlignment.Left, Enum.VerticalAlignment.Top, UDim.new(0, 6))
 
             -- Progress bar
             local ProgBg = Util.New("Frame", {
                 BackgroundColor3 = T.SurfaceAct,
-                Size     = UDim2.new(1, -32, 0, 4),
-                Position = UDim2.new(0, 16, 1, -54),
+                Size     = UDim2.new(1, -36, 0, 5),
+                Position = UDim2.new(0, 18, 1, -60),
                 BorderSizePixel = 0,
                 ZIndex   = 62,
                 Parent   = Card,
@@ -1704,8 +1959,8 @@ function PremiumMenu:CreateWindow(cfg)
             -- Page dots
             local DotsHolder = Util.New("Frame", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(0, #Pages * 18, 0, 10),
-                Position = UDim2.new(0.5, 0, 1, -58),
+                Size     = UDim2.new(0, #Pages * 20, 0, 12),
+                Position = UDim2.new(0.5, 0, 1, -66),
                 AnchorPoint = Vector2.new(0.5, 0),
                 ZIndex   = 62,
                 Parent   = Card,
@@ -1723,7 +1978,7 @@ function PremiumMenu:CreateWindow(cfg)
             for i = 1, #Pages do
                 local d = Util.New("Frame", {
                     BackgroundColor3 = i == 1 and T.Accent or T.SurfaceAct,
-                    Size    = i == 1 and UDim2.new(0, 20, 0, 6) or UDim2.new(0, 6, 0, 6),
+                    Size    = i == 1 and UDim2.new(0, 22, 0, 6) or UDim2.new(0, 6, 0, 6),
                     ZIndex  = 63,
                     Parent  = DotsHolder,
                 })
@@ -1734,44 +1989,44 @@ function PremiumMenu:CreateWindow(cfg)
             -- Footer
             local Footer = Util.New("Frame", {
                 BackgroundTransparency = 1,
-                Size     = UDim2.new(1, -32, 0, 36),
-                Position = UDim2.new(0, 16, 1, -46),
+                Size     = UDim2.new(1, -36, 0, 38),
+                Position = UDim2.new(0, 18, 1, -48),
                 ZIndex   = 62,
                 Parent   = Card,
             })
 
             local BackBtn2 = Util.New("TextButton", {
                 BackgroundColor3 = T.Surface,
-                Size     = UDim2.new(0, 84, 0, 34),
+                Size     = UDim2.new(0, 90, 0, 36),
                 Position = UDim2.new(0, 0, 0, 0),
                 Font     = T.FontMed,
                 Text     = "< Back",
                 TextColor3 = T.TxtMid,
-                TextSize = 13,
+                TextSize = 14,
                 AutoButtonColor = false,
                 Visible  = false,
                 ZIndex   = 63,
                 Parent   = Footer,
             })
             Util.Corner(BackBtn2, T.RadiusSm)
-            BackBtn2.MouseEnter:Connect(function() Util.Tween(BackBtn2, {BackgroundColor3 = T.SurfaceHov}, 0.14) end)
-            BackBtn2.MouseLeave:Connect(function() Util.Tween(BackBtn2, {BackgroundColor3 = T.Surface},    0.14) end)
+            BackBtn2.MouseEnter:Connect(function() Util.Tween(BackBtn2, {BackgroundColor3 = T.SurfaceHov}, 0.15) end)
+            BackBtn2.MouseLeave:Connect(function() Util.Tween(BackBtn2, {BackgroundColor3 = T.Surface},    0.15) end)
 
             local NextBtn2 = Util.New("TextButton", {
                 BackgroundColor3 = T.Accent,
-                Size     = UDim2.new(0, 84, 0, 34),
-                Position = UDim2.new(1, -84, 0, 0),
+                Size     = UDim2.new(0, 90, 0, 36),
+                Position = UDim2.new(1, -90, 0, 0),
                 Font     = T.FontBold,
                 Text     = "Next >",
                 TextColor3 = Color3.new(1, 1, 1),
-                TextSize = 13,
+                TextSize = 14,
                 AutoButtonColor = false,
                 ZIndex   = 63,
                 Parent   = Footer,
             })
             Util.Corner(NextBtn2, T.RadiusSm)
-            NextBtn2.MouseEnter:Connect(function() Util.Tween(NextBtn2, {BackgroundColor3 = T.AccentHov}, 0.14) end)
-            NextBtn2.MouseLeave:Connect(function() Util.Tween(NextBtn2, {BackgroundColor3 = T.Accent},    0.14) end)
+            NextBtn2.MouseEnter:Connect(function() Util.Tween(NextBtn2, {BackgroundColor3 = T.AccentHov}, 0.15) end)
+            NextBtn2.MouseLeave:Connect(function() Util.Tween(NextBtn2, {BackgroundColor3 = T.Accent},    0.15) end)
 
             local lastCode = ""
 
@@ -1782,23 +2037,23 @@ function PremiumMenu:CreateWindow(cfg)
                 HdrTitle.Text = pg.Title
                 HdrSub.Text   = "Step " .. idx .. " of " .. #Pages
 
-                Util.Tween(ProgFill, {Size = UDim2.new(idx / #Pages, 0, 1, 0)}, 0.28)
+                Util.Tween(ProgFill, {Size = UDim2.new(idx / #Pages, 0, 1, 0)}, 0.3)
 
                 for i, d in ipairs(Dots) do
                     if i == idx then
-                        Util.Tween(d, {BackgroundColor3 = T.Accent, Size = UDim2.new(0, 20, 0, 6)}, 0.22)
+                        Util.Tween(d, {BackgroundColor3 = T.Accent, Size = UDim2.new(0, 22, 0, 6)}, 0.25)
                     else
-                        Util.Tween(d, {BackgroundColor3 = T.SurfaceAct, Size = UDim2.new(0, 6, 0, 6)}, 0.22)
+                        Util.Tween(d, {BackgroundColor3 = T.SurfaceAct, Size = UDim2.new(0, 6, 0, 6)}, 0.25)
                     end
                 end
 
                 BackBtn2.Visible = idx > 1
                 if idx == #Pages then
                     NextBtn2.Text = "Finish"
-                    Util.Tween(NextBtn2, {BackgroundColor3 = T.Green}, 0.2)
+                    Util.Tween(NextBtn2, {BackgroundColor3 = T.Green}, 0.25)
                 else
                     NextBtn2.Text = "Next >"
-                    Util.Tween(NextBtn2, {BackgroundColor3 = T.Accent}, 0.2)
+                    Util.Tween(NextBtn2, {BackgroundColor3 = T.Accent}, 0.25)
                 end
 
                 -- Clear body
@@ -1811,17 +2066,17 @@ function PremiumMenu:CreateWindow(cfg)
                     if line == "" then
                         Util.New("Frame", {
                             BackgroundTransparency = 1,
-                            Size   = UDim2.new(1, 0, 0, 5),
+                            Size   = UDim2.new(1, 0, 0, 6),
                             LayoutOrder = i2, ZIndex = 62, Parent = Body2,
                         })
                     else
                         Util.New("TextLabel", {
                             BackgroundTransparency = 1,
-                            Size   = UDim2.new(1, 0, 0, 16),
+                            Size   = UDim2.new(1, 0, 0, 18),
                             Font   = T.FontMed,
                             Text   = line,
                             TextColor3 = T.TxtMid,
-                            TextSize = 13,
+                            TextSize = 14,
                             TextXAlignment = Enum.TextXAlignment.Left,
                             TextWrapped = true,
                             LayoutOrder = i2,
@@ -1837,26 +2092,26 @@ function PremiumMenu:CreateWindow(cfg)
 
                     Util.New("Frame", {
                         BackgroundTransparency = 1,
-                        Size = UDim2.new(1, 0, 0, 6),
+                        Size = UDim2.new(1, 0, 0, 8),
                         LayoutOrder = 100, ZIndex = 62, Parent = Body2,
                     })
 
                     local lines   = string.split(pg.Code, "\n")
-                    local codeH   = math.max(#lines * 16 + 18, 44)
+                    local codeH   = math.max(#lines * 17 + 20, 48)
 
                     local CodeWrap = Util.New("Frame", {
-                        BackgroundColor3 = Color3.fromRGB(10, 10, 16),
-                        Size   = UDim2.new(1, 0, 0, codeH + 28),
+                        BackgroundColor3 = Color3.fromRGB(12, 12, 18),
+                        Size   = UDim2.new(1, 0, 0, codeH + 30),
                         ClipsDescendants = true,
                         LayoutOrder = 101, ZIndex = 62, Parent = Body2,
                     })
                     Util.Corner(CodeWrap, T.RadiusMd)
-                    Util.Stroke(CodeWrap, T.Border, 1, 0.55)
+                    Util.Stroke(CodeWrap, T.Border, 1, 0.6)
 
                     -- Code header bar
                     local CodeHdr = Util.New("Frame", {
-                        BackgroundColor3 = Color3.fromRGB(16, 16, 26),
-                        Size    = UDim2.new(1, 0, 0, 26),
+                        BackgroundColor3 = Color3.fromRGB(18, 18, 28),
+                        Size    = UDim2.new(1, 0, 0, 28),
                         BorderSizePixel = 0,
                         ZIndex  = 63,
                         Parent  = CodeWrap,
@@ -1867,8 +2122,8 @@ function PremiumMenu:CreateWindow(cfg)
                         local dc = ({Color3.fromRGB(255,95,87), Color3.fromRGB(255,189,46), Color3.fromRGB(39,201,63)})[di+1]
                         Util.Corner(Util.New("Frame", {
                             BackgroundColor3 = dc,
-                            Size     = UDim2.new(0, 9, 0, 9),
-                            Position = UDim2.new(0, 10 + di * 18, 0.5, 0),
+                            Size     = UDim2.new(0, 10, 0, 10),
+                            Position = UDim2.new(0, 12 + di * 18, 0.5, 0),
                             AnchorPoint = Vector2.new(0, 0.5),
                             ZIndex   = 64,
                             Parent   = CodeHdr,
@@ -1878,11 +2133,11 @@ function PremiumMenu:CreateWindow(cfg)
                     Util.New("TextLabel", {
                         BackgroundTransparency = 1,
                         Size     = UDim2.new(0.4, 0, 1, 0),
-                        Position = UDim2.new(0, 70, 0, 0),
+                        Position = UDim2.new(0, 75, 0, 0),
                         Font     = T.FontMono,
                         Text     = "example.lua",
                         TextColor3 = T.TxtLow,
-                        TextSize = 10,
+                        TextSize = 11,
                         TextXAlignment = Enum.TextXAlignment.Left,
                         ZIndex   = 64,
                         Parent   = CodeHdr,
@@ -1891,21 +2146,21 @@ function PremiumMenu:CreateWindow(cfg)
                     -- Copy button
                     local CopyBtn = Util.New("TextButton", {
                         BackgroundColor3 = T.SurfaceAct,
-                        Size     = UDim2.new(0, 52, 0, 18),
-                        Position = UDim2.new(1, -60, 0.5, 0),
+                        Size     = UDim2.new(0, 56, 0, 20),
+                        Position = UDim2.new(1, -64, 0.5, 0),
                         AnchorPoint = Vector2.new(0, 0.5),
                         Font     = T.FontMed,
                         Text     = "Copy",
                         TextColor3 = T.TxtMid,
-                        TextSize = 11,
+                        TextSize = 12,
                         AutoButtonColor = false,
                         ZIndex   = 65,
                         Parent   = CodeHdr,
                     })
                     Util.Corner(CopyBtn, UDim.new(0, 4))
 
-                    CopyBtn.MouseEnter:Connect(function() Util.Tween(CopyBtn, {BackgroundColor3 = T.Accent, TextColor3 = Color3.new(1,1,1)}, 0.14) end)
-                    CopyBtn.MouseLeave:Connect(function() Util.Tween(CopyBtn, {BackgroundColor3 = T.SurfaceAct, TextColor3 = T.TxtMid},       0.14) end)
+                    CopyBtn.MouseEnter:Connect(function() Util.Tween(CopyBtn, {BackgroundColor3 = T.Accent, TextColor3 = Color3.new(1,1,1)}, 0.15) end)
+                    CopyBtn.MouseLeave:Connect(function() Util.Tween(CopyBtn, {BackgroundColor3 = T.SurfaceAct, TextColor3 = T.TxtMid},       0.15) end)
                     CopyBtn.MouseButton1Click:Connect(function()
                         local ok = pcall(function()
                             if setclipboard   then setclipboard(lastCode)
@@ -1913,10 +2168,10 @@ function PremiumMenu:CreateWindow(cfg)
                             end
                         end)
                         CopyBtn.Text = ok and "Done!" or "N/A"
-                        Util.Tween(CopyBtn, {BackgroundColor3 = ok and T.Green or T.Yellow}, 0.14)
+                        Util.Tween(CopyBtn, {BackgroundColor3 = ok and T.Green or T.Yellow}, 0.15)
                         task.delay(1.5, function()
                             CopyBtn.Text = "Copy"
-                            Util.Tween(CopyBtn, {BackgroundColor3 = T.SurfaceAct}, 0.14)
+                            Util.Tween(CopyBtn, {BackgroundColor3 = T.SurfaceAct}, 0.15)
                         end)
                     end)
 
@@ -1939,15 +2194,15 @@ function PremiumMenu:CreateWindow(cfg)
 
                     Util.New("TextLabel", {
                         BackgroundTransparency = 1,
-                        Size     = UDim2.new(1, -18, 1, -32),
-                        Position = UDim2.new(0, 9, 0, 30),
+                        Size     = UDim2.new(1, -20, 1, -34),
+                        Position = UDim2.new(0, 10, 0, 32),
                         Font     = T.FontMono,
                         Text     = formatted,
-                        TextColor3 = Color3.fromRGB(175, 210, 255),
-                        TextSize = 12,
+                        TextColor3 = Color3.fromRGB(180, 215, 255),
+                        TextSize = 13,
                         TextXAlignment = Enum.TextXAlignment.Left,
                         TextYAlignment = Enum.TextYAlignment.Top,
-                        TextWrapped    = true,
+                        TextWrapped    = false,
                         ZIndex   = 63,
                         Parent   = CodeWrap,
                     })
@@ -1955,9 +2210,9 @@ function PremiumMenu:CreateWindow(cfg)
             end
 
             local function CloseTutorial()
-                Util.Tween(Card,    {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}, 0.32, Enum.EasingStyle.Back, Enum.EasingDirection.In)
-                Util.Tween(Overlay, {BackgroundTransparency = 1}, 0.32)
-                task.delay(0.38, function()
+                Util.Tween(Card,    {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}, 0.35, Enum.EasingStyle.Back, Enum.EasingDirection.In)
+                Util.Tween(Overlay, {BackgroundTransparency = 1}, 0.35)
+                task.delay(0.4, function()
                     if Overlay and Overlay.Parent then Overlay:Destroy() end
                     if Card    and Card.Parent    then Card:Destroy()    end
                 end)
