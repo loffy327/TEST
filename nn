@@ -4,7 +4,7 @@ local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 
 -- Configuration
-local RAW_GITHUB_URL = "https://raw.githubusercontent.com/YourUsername/YourRepo/main/keys.txt" -- Thay link raw github của bạn vào đây
+local RAW_GITHUB_URL = "https://raw.githubusercontent.com/loffy327/TEST/refs/heads/main/key.txt" -- Thay link raw github của bạn vào đây
 local KEY_SYSTEM_NAME = "My Hub - Key System"
 
 -- Create UI
