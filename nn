@@ -4,90 +4,139 @@ local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 
 -- Configuration
-local RAW_GITHUB_URL = "https://raw.githubusercontent.com/loffy327/TEST/refs/heads/main/key.txt" -- Thay link raw github của bạn vào đây
-local KEY_SYSTEM_NAME = "My Hub - Key System"
+local RAW_GITHUB_URL = "https://raw.githubusercontent.com/YourUsername/YourRepo/main/keys.txt"
+local HUB_NAME = "PREMIUM HUB"
+local GET_KEY_LINK = "https://discord.gg/yourlink" -- Link copy when Get Key is clicked
 
--- Create UI
+-- Clean old UI if exists
+if CoreGui:FindFirstChild("PremiumKeySystem") then
+    CoreGui.PremiumKeySystem:Destroy()
+end
+
 local KeySystemGUI = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local UICorner = Instance.new("UICorner")
-local Title = Instance.new("TextLabel")
-local KeyInput = Instance.new("TextBox")
-local UICorner_2 = Instance.new("UICorner")
-local SubmitButton = Instance.new("TextButton")
-local UICorner_3 = Instance.new("UICorner")
-local Status = Instance.new("TextLabel")
-
--- Properties
-KeySystemGUI.Name = "KeySystemGUI"
+KeySystemGUI.Name = "PremiumKeySystem"
 KeySystemGUI.Parent = CoreGui
 KeySystemGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+-- Sử dụng CanvasGroup để Fade toàn bộ UI dễ dàng
+local MainFrame = Instance.new("CanvasGroup")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = KeySystemGUI
-MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
-MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 17)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.Size = UDim2.new(0, 420, 0, 260)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 
-UICorner.CornerRadius = UDim.new(0, 8)
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
+local UIStroke = Instance.new("UIStroke")
+UIStroke.Color = Color3.fromRGB(40, 40, 45)
+UIStroke.Thickness = 1.2
+UIStroke.Parent = MainFrame
+
+-- Glow accent ở phía trên cùng (Tạo điểm nhấn màu sắc)
+local TopGlow = Instance.new("Frame")
+TopGlow.Name = "TopGlow"
+TopGlow.Parent = MainFrame
+TopGlow.BackgroundColor3 = Color3.fromRGB(99, 102, 241) -- Màu Indigo hiện đại
+TopGlow.BorderSizePixel = 0
+TopGlow.Size = UDim2.new(1, 0, 0, 3)
+
+local Title = Instance.new("TextLabel")
 Title.Name = "Title"
 Title.Parent = MainFrame
-Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Title.BackgroundTransparency = 1.000
-Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0, 0, 0, 30)
+Title.Size = UDim2.new(1, 0, 0, 30)
 Title.Font = Enum.Font.GothamBold
-Title.Text = KEY_SYSTEM_NAME
+Title.Text = HUB_NAME
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 18.000
+Title.TextSize = 22
 
+local Subtitle = Instance.new("TextLabel")
+Subtitle.Name = "Subtitle"
+Subtitle.Parent = MainFrame
+Subtitle.BackgroundTransparency = 1
+Subtitle.Position = UDim2.new(0, 0, 0, 60)
+Subtitle.Size = UDim2.new(1, 0, 0, 20)
+Subtitle.Font = Enum.Font.Gotham
+Subtitle.Text = "Please enter your license key to authenticate"
+Subtitle.TextColor3 = Color3.fromRGB(150, 150, 150)
+Subtitle.TextSize = 13
+
+local KeyInput = Instance.new("TextBox")
 KeyInput.Name = "KeyInput"
 KeyInput.Parent = MainFrame
-KeyInput.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-KeyInput.Position = UDim2.new(0.1, 0, 0.35, 0)
-KeyInput.Size = UDim2.new(0.8, 0, 0, 40)
+KeyInput.BackgroundColor3 = Color3.fromRGB(22, 22, 25)
+KeyInput.Position = UDim2.new(0.5, -170, 0, 100)
+KeyInput.Size = UDim2.new(0, 340, 0, 45)
 KeyInput.Font = Enum.Font.Gotham
-KeyInput.PlaceholderText = "Enter Key Here..."
+KeyInput.PlaceholderText = "Paste your key here (e.g. 12 chars + K + 20 chars + E + 3 chars)"
+KeyInput.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-KeyInput.TextSize = 14.000
+KeyInput.TextSize = 13
+KeyInput.ClearTextOnFocus = false
 
-UICorner_2.CornerRadius = UDim.new(0, 6)
-UICorner_2.Parent = KeyInput
+local InputCorner = Instance.new("UICorner")
+InputCorner.CornerRadius = UDim.new(0, 6)
+InputCorner.Parent = KeyInput
+local InputStroke = Instance.new("UIStroke")
+InputStroke.Color = Color3.fromRGB(50, 50, 55)
+InputStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+InputStroke.Parent = KeyInput
 
-SubmitButton.Name = "SubmitButton"
-SubmitButton.Parent = MainFrame
-SubmitButton.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
-SubmitButton.Position = UDim2.new(0.1, 0, 0.65, 0)
-SubmitButton.Size = UDim2.new(0.8, 0, 0, 40)
-SubmitButton.Font = Enum.Font.GothamBold
-SubmitButton.Text = "Check Key"
-SubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-SubmitButton.TextSize = 14.000
+-- Nút Verify
+local VerifyBtn = Instance.new("TextButton")
+VerifyBtn.Name = "VerifyBtn"
+VerifyBtn.Parent = MainFrame
+VerifyBtn.BackgroundColor3 = Color3.fromRGB(99, 102, 241) 
+VerifyBtn.Position = UDim2.new(0.5, 10, 0, 165)
+VerifyBtn.Size = UDim2.new(0, 160, 0, 40)
+VerifyBtn.Font = Enum.Font.GothamBold
+VerifyBtn.Text = "Verify Key"
+VerifyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+VerifyBtn.TextSize = 14
+VerifyBtn.AutoButtonColor = false
+local VerifyCorner = Instance.new("UICorner")
+VerifyCorner.CornerRadius = UDim.new(0, 6)
+VerifyCorner.Parent = VerifyBtn
 
-UICorner_3.CornerRadius = UDim.new(0, 6)
-UICorner_3.Parent = SubmitButton
+-- Nút Get Key
+local GetKeyBtn = Instance.new("TextButton")
+GetKeyBtn.Name = "GetKeyBtn"
+GetKeyBtn.Parent = MainFrame
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+GetKeyBtn.Position = UDim2.new(0.5, -170, 0, 165)
+GetKeyBtn.Size = UDim2.new(0, 150, 0, 40)
+GetKeyBtn.Font = Enum.Font.GothamBold
+GetKeyBtn.Text = "Get Key"
+GetKeyBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+GetKeyBtn.TextSize = 14
+GetKeyBtn.AutoButtonColor = false
+local GetKeyCorner = Instance.new("UICorner")
+GetKeyCorner.CornerRadius = UDim.new(0, 6)
+GetKeyCorner.Parent = GetKeyBtn
+local GetKeyStroke = Instance.new("UIStroke")
+GetKeyStroke.Color = Color3.fromRGB(60, 60, 65)
+GetKeyStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+GetKeyStroke.Parent = GetKeyBtn
 
+local Status = Instance.new("TextLabel")
 Status.Name = "Status"
 Status.Parent = MainFrame
-Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Status.BackgroundTransparency = 1.000
-Status.Position = UDim2.new(0, 0, 0.85, 0)
+Status.BackgroundTransparency = 1
+Status.Position = UDim2.new(0, 0, 0, 220)
 Status.Size = UDim2.new(1, 0, 0, 20)
 Status.Font = Enum.Font.Gotham
-Status.Text = "Waiting for key..."
-Status.TextColor3 = Color3.fromRGB(180, 180, 180)
-Status.TextSize = 12.000
+Status.Text = "Status: Waiting for input..."
+Status.TextColor3 = Color3.fromRGB(120, 120, 120)
+Status.TextSize = 12
 
--- Function to load the main UI Library (e.g., Orion, Rayfield, etc.)
+-- Load Main UI (Loffy Hub)
 local function LoadMainUI()
-    print("Key Accepted! Loading Loffy Hub...")
-    
-    -- ==========================================
-    -- UI LIBRARY INITIALIZATION
-    -- ==========================================
     local ui_url = "https://raw.githubusercontent.com/test12for/BF-by-CongDanh/refs/heads/main/Libv2_non_release.lua"
     local PremiumMenu = loadstring(game:HttpGet(ui_url))()
     local Window = PremiumMenu:CreateWindow({
@@ -98,82 +147,76 @@ local function LoadMainUI()
         ToggleKey = Enum.KeyCode.RightShift,
         TutorialMode = false
     }) 
-    
-    -- (Tạo các Tab, Button, Toggle của bạn ở phía dưới dòng này)
-    -- Ví dụ:
-    -- local MainTab = Window:CreateTab({ Title = "Main" })
-    -- ...
 end
 
--- Time Parser Function
+-- Tiện ích
 local function ParseExpirationTime(timeFormat)
-    if timeFormat == "/0" then return math.huge end -- Lifetime
-    
+    if timeFormat == "/0" then return math.huge end
     local slashes, unit = timeFormat:match("^(/*)(%w)$")
     if not slashes or not unit then return nil end
-    
     local count = #slashes
     local multiplier = 0
-    
-    if unit == "S" then multiplier = 1 -- Seconds
-    elseif unit == "H" then multiplier = 3600 -- Hours
-    elseif unit == "D" then multiplier = 86400 -- Days
-    elseif unit == "Y" then multiplier = 31536000 -- Years
+    if unit == "S" then multiplier = 1
+    elseif unit == "H" then multiplier = 3600
+    elseif unit == "D" then multiplier = 86400
+    elseif unit == "Y" then multiplier = 31536000
     end
-    
     return count * multiplier
 end
 
--- Key Verification Logic
-SubmitButton.MouseButton1Click:Connect(function()
+local function UpdateStatus(text, color)
+    Status.Text = text
+    Status.TextColor3 = color
+end
+
+-- ===================================
+-- LOGIC KIỂM TRA KEY (KHÔNG CÓ ĐUÔI)
+-- ===================================
+VerifyBtn.MouseButton1Click:Connect(function()
     local enteredKey = KeyInput.Text
-    enteredKey = string.gsub(enteredKey, "%s+", "") -- Remove spaces
-    enteredKey = string.gsub(enteredKey, "|", "") -- Remove pipes if they copy-pasted them
+    enteredKey = string.gsub(enteredKey, "%s+", "")
+    enteredKey = string.gsub(enteredKey, "|", "")
     
     if enteredKey == "" then
-        Status.Text = "Please enter a key."
-        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+        UpdateStatus("Please enter a key.", Color3.fromRGB(255, 100, 100))
         return
     end
 
-    -- Validate Format: 12 chars + K + 20 chars + E + 3 chars + Time Format
-    local timeFormat = enteredKey:match("^............K....................E...(.+)$")
-    if not timeFormat then
-        Status.Text = "Invalid Key Format!"
-        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+    -- Khách chỉ nhập Key dạng: 12 chars + K + 20 chars + E + 3 chars (Độ dài chuẩn: 37)
+    -- Không nhập đuôi ///D
+    if not enteredKey:match("^............K....................E...$") then
+        UpdateStatus("Invalid Key Format! (Do not include //D at the end)", Color3.fromRGB(255, 100, 100))
         return
     end
 
-    Status.Text = "Checking key online..."
-    Status.TextColor3 = Color3.fromRGB(255, 255, 255)
+    UpdateStatus("Checking key online...", Color3.fromRGB(200, 200, 200))
     
-    -- Fetch raw github keys
     local success, githubContent = pcall(function()
         return game:HttpGet(RAW_GITHUB_URL)
     end)
 
     if not success then
-        Status.Text = "Failed to connect to server!"
-        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+        UpdateStatus("Failed to connect to server!", Color3.fromRGB(255, 100, 100))
         return
     end
 
-    -- Check if key exists in github content
-    if not string.find(githubContent, enteredKey, 1, true) then
-        Status.Text = "Key not found!"
-        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+    -- Tìm Key trong Github, và tách ĐUÔI THỜI GIAN ra từ dòng đó
+    -- Ký tự %S+ sẽ lấy toàn bộ đoạn mã thời gian nằm sát ngay sau đoạn key 37 ký tự
+    local timeFormat = githubContent:match(enteredKey .. "([/%w]+)")
+    
+    if not timeFormat then
+        UpdateStatus("Key not found in database!", Color3.fromRGB(255, 100, 100))
         return
     end
 
-    -- Parse duration
+    -- Nếu tìm thấy, lấy đuôi đó để tính toán Hạn sử dụng
     local durationSeconds = ParseExpirationTime(timeFormat)
     if not durationSeconds then
-        Status.Text = "Corrupted Key Duration!"
-        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+        UpdateStatus("Corrupted Key Duration on server!", Color3.fromRGB(255, 100, 100))
         return
     end
 
-    -- Expiration Check using local files (Requires Executor with writefile/readfile)
+    -- Lưu thời gian bắt đầu dùng vào máy người dùng
     local fileName = "KeySystem_" .. enteredKey .. ".txt"
     if isfile and readfile and writefile then
         if isfile(fileName) then
@@ -181,34 +224,50 @@ SubmitButton.MouseButton1Click:Connect(function()
             if startTime then
                 local elapsed = os.time() - startTime
                 if elapsed > durationSeconds then
-                    Status.Text = "Key has expired!"
-                    Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+                    UpdateStatus("Key has expired!", Color3.fromRGB(255, 100, 100))
                     return
                 end
             end
         else
-            -- First time using this key, save current time
             writefile(fileName, tostring(os.time()))
         end
-    else
-        warn("Executor does not support file saving. Key expiration cannot be tracked locally.")
     end
 
-    Status.Text = "Key Valid! Loading..."
-    Status.TextColor3 = Color3.fromRGB(100, 255, 100)
+    UpdateStatus("Authentication Successful!", Color3.fromRGB(100, 255, 100))
     
-    -- Fade out animation
-    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local fadeTween = TweenService:Create(MainFrame, tweenInfo, {BackgroundTransparency = 1})
-    TweenService:Create(Title, tweenInfo, {TextTransparency = 1}):Play()
-    TweenService:Create(KeyInput, tweenInfo, {BackgroundTransparency = 1, TextTransparency = 1}):Play()
-    TweenService:Create(SubmitButton, tweenInfo, {BackgroundTransparency = 1, TextTransparency = 1}):Play()
-    TweenService:Create(Status, tweenInfo, {TextTransparency = 1}):Play()
+    -- Hiệu ứng tắt UI Mượt mà sử dụng GroupTransparency
+    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    TweenService:Create(MainFrame, tweenInfo, {GroupTransparency = 1, Size = UDim2.new(0, 380, 0, 230)}):Play()
     
-    fadeTween:Play()
-    fadeTween.Completed:Wait()
-    
-    -- Destroy Key UI and load main script
+    task.wait(0.5)
     KeySystemGUI:Destroy()
     LoadMainUI()
 end)
+
+GetKeyBtn.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(GET_KEY_LINK)
+        UpdateStatus("Link copied to clipboard!", Color3.fromRGB(100, 255, 100))
+    else
+        UpdateStatus("Your executor does not support auto-copy.", Color3.fromRGB(255, 100, 100))
+    end
+end)
+
+-- Hover Effects
+local function BindButtonAnimation(btn, hoverColor, defaultColor)
+    btn.MouseEnter:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = hoverColor}):Play()
+    end)
+    btn.MouseLeave:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = defaultColor}):Play()
+    end)
+end
+
+BindButtonAnimation(VerifyBtn, Color3.fromRGB(80, 85, 230), Color3.fromRGB(99, 102, 241))
+BindButtonAnimation(GetKeyBtn, Color3.fromRGB(40, 40, 45), Color3.fromRGB(30, 30, 35))
+
+-- Intro Animation (Fade in & Bounce)
+MainFrame.Size = UDim2.new(0, 380, 0, 230)
+MainFrame.GroupTransparency = 1
+TweenService:Create(MainFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 420, 0, 260)}):Play()
+TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {GroupTransparency = 0}):Play()
