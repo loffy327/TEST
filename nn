@@ -200,9 +200,12 @@ VerifyBtn.MouseButton1Click:Connect(function()
         return
     end
 
-    -- Tìm Key trong Github, và tách ĐUÔI THỜI GIAN ra từ dòng đó
-    -- Ký tự %S+ sẽ lấy toàn bộ đoạn mã thời gian nằm sát ngay sau đoạn key 37 ký tự
-    local timeFormat = githubContent:match(enteredKey .. "([/%w]+)")
+    -- ===================================
+    -- CƠ CHẾ GIẢI MÃ (TÌM KEY TRONG WALL OF TEXT)
+    -- ===================================
+    -- Do trên Github các key bị nối liền với nhau bằng chữ "A" (Ví dụ: key1//DAkey2/0)
+    -- Ta sẽ tìm key, sau đó lấy các ký tự phía sau key cho đến khi gặp chữ "A" (hoặc xuống dòng)
+    local timeFormat = githubContent:match(enteredKey .. "([^A\r\n]+)")
     
     if not timeFormat then
         UpdateStatus("Key not found in database!", Color3.fromRGB(255, 100, 100))
