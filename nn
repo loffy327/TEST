@@ -4,7 +4,7 @@ local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 
 -- Configuration
-local RAW_GITHUB_URL = "https://raw.githubusercontent.com/YourUsername/YourRepo/main/keys.txt"
+local RAW_GITHUB_URL = "https://raw.githubusercontent.com/loffy327/TEST/refs/heads/main/key.txt"
 local HUB_NAME = "PREMIUM HUB"
 local GET_KEY_LINK = "https://discord.gg/yourlink" -- Link copy when Get Key is clicked
 
