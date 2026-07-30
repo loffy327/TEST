@@ -2,23 +2,48 @@
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local SoundService = game:GetService("SoundService")
 
 -- Configuration
 local RAW_GITHUB_URL = "https://raw.githubusercontent.com/loffy327/TEST/refs/heads/main/key.txt"
 local HUB_NAME = "PREMIUM HUB"
-local GET_KEY_LINK = "https://discord.gg/yourlink" -- Link copy when Get Key is clicked
+local GET_KEY_LINK = "https://discord.gg/yourlink" -- Thay link vượt key của bạn vào đây
 
--- Clean old UI if exists
-if CoreGui:FindFirstChild("PremiumKeySystem") then
-    CoreGui.PremiumKeySystem:Destroy()
+-- =====================================
+-- ÂM THANH (SFX)
+-- =====================================
+local function PlaySound(id, volume)
+    task.spawn(function()
+        local sound = Instance.new("Sound")
+        sound.SoundId = "rbxassetid://" .. id
+        sound.Volume = volume or 1
+        sound.Parent = SoundService
+        sound:Play()
+        sound.Ended:Wait()
+        sound:Destroy()
+    end)
 end
+
+-- Dọn dẹp UI cũ nếu bị trùng
+if CoreGui:FindFirstChild("PremiumKeySystem") then CoreGui.PremiumKeySystem:Destroy() end
+if Lighting:FindFirstChild("PremiumKeyBlur") then Lighting.PremiumKeyBlur:Destroy() end
+
+-- =====================================
+-- TÍNH NĂNG NGẦU 1: LÀM MỜ BACKGROUND CỰC CHILL
+-- =====================================
+local Blur = Instance.new("BlurEffect")
+Blur.Name = "PremiumKeyBlur"
+Blur.Size = 0
+Blur.Parent = Lighting
+TweenService:Create(Blur, TweenInfo.new(0.6, Enum.EasingStyle.Cubic), {Size = 25}):Play()
 
 local KeySystemGUI = Instance.new("ScreenGui")
 KeySystemGUI.Name = "PremiumKeySystem"
 KeySystemGUI.Parent = CoreGui
 KeySystemGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Sử dụng CanvasGroup để Fade toàn bộ UI dễ dàng
 local MainFrame = Instance.new("CanvasGroup")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = KeySystemGUI
@@ -26,6 +51,32 @@ MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 17)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.Size = UDim2.new(0, 420, 0, 260)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+
+-- =====================================
+-- TÍNH NĂNG NGẦU 2: DRAGGABLE (KÉO THẢ UI)
+-- =====================================
+local dragging, dragInput, dragStart, startPos
+MainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
+        end)
+    end
+end)
+MainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
 
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 10)
@@ -36,13 +87,33 @@ UIStroke.Color = Color3.fromRGB(40, 40, 45)
 UIStroke.Thickness = 1.2
 UIStroke.Parent = MainFrame
 
--- Glow accent ở phía trên cùng (Tạo điểm nhấn màu sắc)
+-- =====================================
+-- TÍNH NĂNG NGẦU 3: DẢI MÀU GRADIENT CHUYỂN ĐỘNG
+-- =====================================
 local TopGlow = Instance.new("Frame")
 TopGlow.Name = "TopGlow"
 TopGlow.Parent = MainFrame
-TopGlow.BackgroundColor3 = Color3.fromRGB(99, 102, 241) -- Màu Indigo hiện đại
+TopGlow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 TopGlow.BorderSizePixel = 0
 TopGlow.Size = UDim2.new(1, 0, 0, 3)
+
+local GlowGradient = Instance.new("UIGradient")
+GlowGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(99, 102, 241)),   -- Indigo
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(168, 85, 247)), -- Purple
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(236, 72, 153))    -- Pink
+})
+GlowGradient.Parent = TopGlow
+
+-- Vòng lặp chuyển động màu
+task.spawn(function()
+    local t = 0
+    while task.wait() do
+        if not TopGlow or not TopGlow.Parent then break end
+        t = t + 0.015
+        GlowGradient.Offset = Vector2.new(math.sin(t), 0)
+    end
+end)
 
 local Title = Instance.new("TextLabel")
 Title.Name = "Title"
@@ -62,9 +133,9 @@ Subtitle.BackgroundTransparency = 1
 Subtitle.Position = UDim2.new(0, 0, 0, 60)
 Subtitle.Size = UDim2.new(1, 0, 0, 20)
 Subtitle.Font = Enum.Font.Gotham
-Subtitle.Text = "Please enter your license key to authenticate"
+Subtitle.Text = "Hardware ID Secured • Authentication Required"
 Subtitle.TextColor3 = Color3.fromRGB(150, 150, 150)
-Subtitle.TextSize = 13
+Subtitle.TextSize = 12
 
 local KeyInput = Instance.new("TextBox")
 KeyInput.Name = "KeyInput"
@@ -73,7 +144,7 @@ KeyInput.BackgroundColor3 = Color3.fromRGB(22, 22, 25)
 KeyInput.Position = UDim2.new(0.5, -170, 0, 100)
 KeyInput.Size = UDim2.new(0, 340, 0, 45)
 KeyInput.Font = Enum.Font.Gotham
-KeyInput.PlaceholderText = "Paste your key here (e.g. 12 chars + K + 20 chars + E + 3 chars)"
+KeyInput.PlaceholderText = "Paste your key here..."
 KeyInput.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -87,6 +158,17 @@ local InputStroke = Instance.new("UIStroke")
 InputStroke.Color = Color3.fromRGB(50, 50, 55)
 InputStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 InputStroke.Parent = KeyInput
+
+-- =====================================
+-- TÍNH NĂNG NGẦU 4: AUTO-SAVE & AUTO-LOAD KEY
+-- =====================================
+local SavedKeyFile = "PremiumHub_SavedKey.txt"
+if isfile and isfile(SavedKeyFile) then
+    local success, savedKey = pcall(function() return readfile(SavedKeyFile) end)
+    if success and savedKey and savedKey ~= "" then
+        KeyInput.Text = savedKey
+    end
+end
 
 -- Nút Verify
 local VerifyBtn = Instance.new("TextButton")
@@ -149,7 +231,6 @@ local function LoadMainUI()
     }) 
 end
 
--- Tiện ích
 local function ParseExpirationTime(timeFormat)
     if timeFormat == "/0" then return math.huge end
     local slashes, unit = timeFormat:match("^(/*)(%w)$")
@@ -170,56 +251,63 @@ local function UpdateStatus(text, color)
 end
 
 -- ===================================
--- LOGIC KIỂM TRA KEY (KHÔNG CÓ ĐUÔI)
+-- LOGIC KIỂM TRA KEY GỘP (CHO CẢ NÚT BẤM VÀ AUTO)
 -- ===================================
-VerifyBtn.MouseButton1Click:Connect(function()
+local verifying = false
+
+local function ProcessKeyVerification()
+    if verifying then return end
+    verifying = true
+    
     local enteredKey = KeyInput.Text
     enteredKey = string.gsub(enteredKey, "%s+", "")
     enteredKey = string.gsub(enteredKey, "|", "")
     
     if enteredKey == "" then
+        PlaySound("683523095", 0.5) -- Error
         UpdateStatus("Please enter a key.", Color3.fromRGB(255, 100, 100))
+        verifying = false
         return
     end
 
-    -- Khách chỉ nhập Key dạng: 12 chars + K + 20 chars + E + 3 chars (Độ dài chuẩn: 37)
-    -- Không nhập đuôi ///D
     if not enteredKey:match("^............K....................E...$") then
-        UpdateStatus("Invalid Key Format! (Do not include //D at the end)", Color3.fromRGB(255, 100, 100))
+        PlaySound("683523095", 0.5)
+        UpdateStatus("Invalid Key Format!", Color3.fromRGB(255, 100, 100))
+        verifying = false
         return
     end
 
-    UpdateStatus("Checking key online...", Color3.fromRGB(200, 200, 200))
+    PlaySound("683108986", 0.3) -- Click
+    UpdateStatus("Authenticating with server...", Color3.fromRGB(200, 200, 200))
     
     local success, githubContent = pcall(function()
         return game:HttpGet(RAW_GITHUB_URL)
     end)
 
     if not success then
+        PlaySound("683523095", 0.5)
         UpdateStatus("Failed to connect to server!", Color3.fromRGB(255, 100, 100))
+        verifying = false
         return
     end
 
-    -- ===================================
-    -- CƠ CHẾ GIẢI MÃ (TÌM KEY TRONG WALL OF TEXT)
-    -- ===================================
-    -- Do trên Github các key bị nối liền với nhau bằng chữ "A" (Ví dụ: key1//DAkey2/0)
-    -- Ta sẽ tìm key, sau đó lấy các ký tự phía sau key cho đến khi gặp chữ "A" (hoặc xuống dòng)
     local timeFormat = githubContent:match(enteredKey .. "([^A\r\n]+)")
     
     if not timeFormat then
-        UpdateStatus("Key not found in database!", Color3.fromRGB(255, 100, 100))
+        PlaySound("683523095", 0.5)
+        UpdateStatus("Key not found or blacklisted!", Color3.fromRGB(255, 100, 100))
+        verifying = false
         return
     end
 
-    -- Nếu tìm thấy, lấy đuôi đó để tính toán Hạn sử dụng
     local durationSeconds = ParseExpirationTime(timeFormat)
     if not durationSeconds then
-        UpdateStatus("Corrupted Key Duration on server!", Color3.fromRGB(255, 100, 100))
+        PlaySound("683523095", 0.5)
+        UpdateStatus("Corrupted server response!", Color3.fromRGB(255, 100, 100))
+        verifying = false
         return
     end
 
-    -- Lưu thời gian bắt đầu dùng vào máy người dùng
     local fileName = "KeySystem_" .. enteredKey .. ".txt"
     if isfile and readfile and writefile then
         if isfile(fileName) then
@@ -227,27 +315,44 @@ VerifyBtn.MouseButton1Click:Connect(function()
             if startTime then
                 local elapsed = os.time() - startTime
                 if elapsed > durationSeconds then
-                    UpdateStatus("Key has expired!", Color3.fromRGB(255, 100, 100))
+                    PlaySound("683523095", 0.5)
+                    UpdateStatus("Your key has expired!", Color3.fromRGB(255, 100, 100))
+                    
+                    -- Xoá auto save đi vì key đã hết hạn
+                    if isfile(SavedKeyFile) then
+                        pcall(function() delfile(SavedKeyFile) end)
+                    end
+                    
+                    verifying = false
                     return
                 end
             end
         else
             writefile(fileName, tostring(os.time()))
         end
+        
+        -- Lưu lại key hợp lệ để lần sau tự vào
+        writefile(SavedKeyFile, enteredKey)
     end
 
+    PlaySound("2865227271", 0.6) -- Success
     UpdateStatus("Authentication Successful!", Color3.fromRGB(100, 255, 100))
     
-    -- Hiệu ứng tắt UI Mượt mà sử dụng GroupTransparency
-    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    -- Fade out
+    local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
     TweenService:Create(MainFrame, tweenInfo, {GroupTransparency = 1, Size = UDim2.new(0, 380, 0, 230)}):Play()
+    TweenService:Create(Blur, TweenInfo.new(0.6), {Size = 0}):Play()
     
-    task.wait(0.5)
+    task.wait(0.6)
+    Blur:Destroy()
     KeySystemGUI:Destroy()
     LoadMainUI()
-end)
+end
+
+VerifyBtn.MouseButton1Click:Connect(ProcessKeyVerification)
 
 GetKeyBtn.MouseButton1Click:Connect(function()
+    PlaySound("683108986", 0.3)
     if setclipboard then
         setclipboard(GET_KEY_LINK)
         UpdateStatus("Link copied to clipboard!", Color3.fromRGB(100, 255, 100))
@@ -259,6 +364,7 @@ end)
 -- Hover Effects
 local function BindButtonAnimation(btn, hoverColor, defaultColor)
     btn.MouseEnter:Connect(function()
+        PlaySound("683108986", 0.1) -- Âm thanh di chuột nhẹ nhàng
         TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = hoverColor}):Play()
     end)
     btn.MouseLeave:Connect(function()
@@ -269,8 +375,20 @@ end
 BindButtonAnimation(VerifyBtn, Color3.fromRGB(80, 85, 230), Color3.fromRGB(99, 102, 241))
 BindButtonAnimation(GetKeyBtn, Color3.fromRGB(40, 40, 45), Color3.fromRGB(30, 30, 35))
 
--- Intro Animation (Fade in & Bounce)
+-- =====================================
+-- HIỆU ỨNG INTRO & AUTO VERIFY
+-- =====================================
 MainFrame.Size = UDim2.new(0, 380, 0, 230)
 MainFrame.GroupTransparency = 1
-TweenService:Create(MainFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 420, 0, 260)}):Play()
-TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {GroupTransparency = 0}):Play()
+TweenService:Create(MainFrame, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 420, 0, 260)}):Play()
+TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {GroupTransparency = 0}):Play()
+
+-- Tự động check nếu đã có Key lưu từ trước
+if KeyInput.Text ~= "" then
+    task.spawn(function()
+        task.wait(0.7) -- Đợi UI bật lên xong
+        UpdateStatus("Auto-verifying saved key...", Color3.fromRGB(200, 200, 200))
+        task.wait(0.3)
+        ProcessKeyVerification()
+    end)
+end
