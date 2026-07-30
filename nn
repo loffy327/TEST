@@ -1,0 +1,214 @@
+-- Services
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
+
+-- Configuration
+local RAW_GITHUB_URL = "https://raw.githubusercontent.com/YourUsername/YourRepo/main/keys.txt" -- Thay link raw github của bạn vào đây
+local KEY_SYSTEM_NAME = "My Hub - Key System"
+
+-- Create UI
+local KeySystemGUI = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Title = Instance.new("TextLabel")
+local KeyInput = Instance.new("TextBox")
+local UICorner_2 = Instance.new("UICorner")
+local SubmitButton = Instance.new("TextButton")
+local UICorner_3 = Instance.new("UICorner")
+local Status = Instance.new("TextLabel")
+
+-- Properties
+KeySystemGUI.Name = "KeySystemGUI"
+KeySystemGUI.Parent = CoreGui
+KeySystemGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = KeySystemGUI
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+
+UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.Parent = MainFrame
+
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundTransparency = 1.000
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Font = Enum.Font.GothamBold
+Title.Text = KEY_SYSTEM_NAME
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 18.000
+
+KeyInput.Name = "KeyInput"
+KeyInput.Parent = MainFrame
+KeyInput.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+KeyInput.Position = UDim2.new(0.1, 0, 0.35, 0)
+KeyInput.Size = UDim2.new(0.8, 0, 0, 40)
+KeyInput.Font = Enum.Font.Gotham
+KeyInput.PlaceholderText = "Enter Key Here..."
+KeyInput.Text = ""
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.TextSize = 14.000
+
+UICorner_2.CornerRadius = UDim.new(0, 6)
+UICorner_2.Parent = KeyInput
+
+SubmitButton.Name = "SubmitButton"
+SubmitButton.Parent = MainFrame
+SubmitButton.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
+SubmitButton.Position = UDim2.new(0.1, 0, 0.65, 0)
+SubmitButton.Size = UDim2.new(0.8, 0, 0, 40)
+SubmitButton.Font = Enum.Font.GothamBold
+SubmitButton.Text = "Check Key"
+SubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SubmitButton.TextSize = 14.000
+
+UICorner_3.CornerRadius = UDim.new(0, 6)
+UICorner_3.Parent = SubmitButton
+
+Status.Name = "Status"
+Status.Parent = MainFrame
+Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Status.BackgroundTransparency = 1.000
+Status.Position = UDim2.new(0, 0, 0.85, 0)
+Status.Size = UDim2.new(1, 0, 0, 20)
+Status.Font = Enum.Font.Gotham
+Status.Text = "Waiting for key..."
+Status.TextColor3 = Color3.fromRGB(180, 180, 180)
+Status.TextSize = 12.000
+
+-- Function to load the main UI Library (e.g., Orion, Rayfield, etc.)
+local function LoadMainUI()
+    print("Key Accepted! Loading Loffy Hub...")
+    
+    -- ==========================================
+    -- UI LIBRARY INITIALIZATION
+    -- ==========================================
+    local ui_url = "https://raw.githubusercontent.com/test12for/BF-by-CongDanh/refs/heads/main/Libv2_non_release.lua"
+    local PremiumMenu = loadstring(game:HttpGet(ui_url))()
+    local Window = PremiumMenu:CreateWindow({
+        Title = "Loffy Hub | Make HotSauce",
+        Subtitle = "https://discord.gg/dCnYaQjG3 Join My Discord!",
+        LogoText = "L",
+        AccentColor = Color3.fromRGB(99, 102, 241),
+        ToggleKey = Enum.KeyCode.RightShift,
+        TutorialMode = false
+    }) 
+    
+    -- (Tạo các Tab, Button, Toggle của bạn ở phía dưới dòng này)
+    -- Ví dụ:
+    -- local MainTab = Window:CreateTab({ Title = "Main" })
+    -- ...
+end
+
+-- Time Parser Function
+local function ParseExpirationTime(timeFormat)
+    if timeFormat == "/0" then return math.huge end -- Lifetime
+    
+    local slashes, unit = timeFormat:match("^(/*)(%w)$")
+    if not slashes or not unit then return nil end
+    
+    local count = #slashes
+    local multiplier = 0
+    
+    if unit == "S" then multiplier = 1 -- Seconds
+    elseif unit == "H" then multiplier = 3600 -- Hours
+    elseif unit == "D" then multiplier = 86400 -- Days
+    elseif unit == "Y" then multiplier = 31536000 -- Years
+    end
+    
+    return count * multiplier
+end
+
+-- Key Verification Logic
+SubmitButton.MouseButton1Click:Connect(function()
+    local enteredKey = KeyInput.Text
+    enteredKey = string.gsub(enteredKey, "%s+", "") -- Remove spaces
+    enteredKey = string.gsub(enteredKey, "|", "") -- Remove pipes if they copy-pasted them
+    
+    if enteredKey == "" then
+        Status.Text = "Please enter a key."
+        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+        return
+    end
+
+    -- Validate Format: 12 chars + K + 20 chars + E + 3 chars + Time Format
+    local timeFormat = enteredKey:match("^............K....................E...(.+)$")
+    if not timeFormat then
+        Status.Text = "Invalid Key Format!"
+        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+        return
+    end
+
+    Status.Text = "Checking key online..."
+    Status.TextColor3 = Color3.fromRGB(255, 255, 255)
+    
+    -- Fetch raw github keys
+    local success, githubContent = pcall(function()
+        return game:HttpGet(RAW_GITHUB_URL)
+    end)
+
+    if not success then
+        Status.Text = "Failed to connect to server!"
+        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+        return
+    end
+
+    -- Check if key exists in github content
+    if not string.find(githubContent, enteredKey, 1, true) then
+        Status.Text = "Key not found!"
+        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+        return
+    end
+
+    -- Parse duration
+    local durationSeconds = ParseExpirationTime(timeFormat)
+    if not durationSeconds then
+        Status.Text = "Corrupted Key Duration!"
+        Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+        return
+    end
+
+    -- Expiration Check using local files (Requires Executor with writefile/readfile)
+    local fileName = "KeySystem_" .. enteredKey .. ".txt"
+    if isfile and readfile and writefile then
+        if isfile(fileName) then
+            local startTime = tonumber(readfile(fileName))
+            if startTime then
+                local elapsed = os.time() - startTime
+                if elapsed > durationSeconds then
+                    Status.Text = "Key has expired!"
+                    Status.TextColor3 = Color3.fromRGB(255, 100, 100)
+                    return
+                end
+            end
+        else
+            -- First time using this key, save current time
+            writefile(fileName, tostring(os.time()))
+        end
+    else
+        warn("Executor does not support file saving. Key expiration cannot be tracked locally.")
+    end
+
+    Status.Text = "Key Valid! Loading..."
+    Status.TextColor3 = Color3.fromRGB(100, 255, 100)
+    
+    -- Fade out animation
+    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local fadeTween = TweenService:Create(MainFrame, tweenInfo, {BackgroundTransparency = 1})
+    TweenService:Create(Title, tweenInfo, {TextTransparency = 1}):Play()
+    TweenService:Create(KeyInput, tweenInfo, {BackgroundTransparency = 1, TextTransparency = 1}):Play()
+    TweenService:Create(SubmitButton, tweenInfo, {BackgroundTransparency = 1, TextTransparency = 1}):Play()
+    TweenService:Create(Status, tweenInfo, {TextTransparency = 1}):Play()
+    
+    fadeTween:Play()
+    fadeTween.Completed:Wait()
+    
+    -- Destroy Key UI and load main script
+    KeySystemGUI:Destroy()
+    LoadMainUI()
+end)
